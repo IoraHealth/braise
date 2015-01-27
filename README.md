@@ -13,7 +13,7 @@ cd ~/src
 git clone https://github.com/IoraHealth/braise.git
 ```
 
-bash: echo 'export PATH=$PATH:~/src/braise/bin' >> ~/.bash_profile
+bash: `echo 'export PATH=$PATH:~/src/braise/bin' >> ~/.bash_profile`
 
 USAGE
 -----
