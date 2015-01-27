@@ -17,7 +17,7 @@ defmodule Braise.AdapterTemplate do
 
       headers: function() {
         return {
-          'AUTHORIZATION': 'Bearer' + this.get('token');
+          'AUTHORIZATION': 'Bearer ' + this.get('token');
         };
       }.property('token')
     });
