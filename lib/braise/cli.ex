@@ -40,5 +40,13 @@ defmodule Braise.CLI do
     json = Poison.Parser.parse!(file)
     {:ok, adapter} = Braise.AdapterTemplate.generate_from_json(json)
     IO.puts adapter
+
+    serializer_template = Braise.SerializerTemplate.generate_from_json(json)
+    serializer_output = case serializer_template do
+      {:ok, serializer } -> serializer
+      {:noop, _ } -> "No Serializer needed"
+    end
+
+    IO.puts serializer_output
   end
 end
