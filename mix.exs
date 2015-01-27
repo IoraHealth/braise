@@ -5,6 +5,7 @@ defmodule Braise.Mixfile do
     [app: :braise,
      version: "0.0.1",
      elixir: "~> 1.0",
+     escript: escript_config,
      deps: deps]
   end
 
@@ -26,5 +27,9 @@ defmodule Braise.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [{:poison, "~> 1.3.1"}]
+  end
+
+  defp escript_config do
+    [ main_module: Braise.CLI ]
   end
 end
