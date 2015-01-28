@@ -1,9 +1,8 @@
-Braise
+Braise [![[travis]](https://travis-ci.org/iorahealth/braise.png)](https://travis-ci.org/iorahealth/braise)
 ======
 
 Braise cooks those boring old JSON Schema definitions
 down into rock-hard-awesome Ember CLI files.
-
 
 INSTALLATION
 ------------
