@@ -1,4 +1,4 @@
-Braise [![[travis]](https://travis-ci.org/iorahealth/braise.png)](https://travis-ci.org/iorahealth/braise)
+Braise [![[travis]](https://travis-ci.org/IoraHealth/braise.png)](https://travis-ci.org/IoraHealth/braise)
 ======
 
 Braise cooks those boring old JSON Schema definitions
