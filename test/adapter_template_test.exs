@@ -4,7 +4,7 @@ defmodule AdapterTemplateTest do
   import Braise.AdapterTemplate
 
   test "a valid link section produces a good template" do
-    json = %{"links" => [%{"href" => "http://production.icisapp.com/api/v2", "ref" => "something else"}]}
+    resource = %Braise.Resource{links: [%{"href" => "http://production.icisapp.com/api/v2"}]}
     expected_template = """
     import DS from 'ember-data';
     import Ember from 'ember';
@@ -21,7 +21,7 @@ defmodule AdapterTemplateTest do
       }.property('token')
     });
     """
-    {:ok, template } = generate_from_json(json)
+    {:ok, template } = generate_from_resource(resource)
 
     assert template == expected_template
   end
@@ -29,7 +29,7 @@ defmodule AdapterTemplateTest do
   test "an invalid json schema produces an error" do
     json = %{"pirate_town" => "YISSSS"}
 
-    {:error, msg } = generate_from_json(json)
+    {:error, msg } = generate_from_resource(json)
 
     assert msg == "Invalid JSON Schema"
   end
