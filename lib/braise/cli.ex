@@ -37,8 +37,8 @@ defmodule Braise.CLI do
   def process({:file, filename}) do
     {:ok, file} = File.read(filename)
 
-    json = Poison.Parser.parse!(file)
-    {:ok, adapter} = Braise.AdapterTemplate.generate_from_json(json)
+    resource       = Poison.decode!(file, as: Braise.Resource)
+    {:ok, adapter} = Braise.AdapterTemplate.generate_from_resource(resource)
     IO.puts adapter
   end
 end
