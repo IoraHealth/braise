@@ -30,12 +30,19 @@ defmodule Braise.AdapterTemplate do
     { :error, "Invalid JSON Schema" }
   end
 
+  defp fill_template(uri, template_string) do
+    replace_uri_variables(template_string, uri)
+    |> replace_path_for_type_variable("patient")
+  end
 
-  defp fill_template(%{host: host, path: path, scheme: scheme}, template_string) do
-    String.replace(template_string, ~r/<%= scheme %>/, scheme)
+  defp replace_uri_variables(template, %{host: host, path: path, scheme: scheme}) do
+    String.replace(template, ~r/<%= scheme %>/, scheme)
     |> String.replace(~r/<%= host %>/, host)
     |> String.replace(~r/<%= path %>/, path)
-    |> String.replace(~r/<%= path_for_type %>/, "")
+  end
+
+  defp replace_path_for_type_variable(template, "patient") do
+    String.replace(template, ~r/<%= path_for_type %>/, "")
   end
 
   defp ok_tuple(string) do
