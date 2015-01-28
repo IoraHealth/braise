@@ -20,10 +20,15 @@ defmodule Braise.AdapterTemplate do
   def generate_from_resource(resource, template_string \\ @template_string)
 
   def generate_from_resource(resource = %Braise.Resource{}, template_string) do
-    case Braise.Resource.url(resource) do
-      {:ok, url}    -> fill_template(url, template_string) |> ok_tuple
-      {:error, msg} -> {:error, msg}
+    resource_tuples = [Braise.Resource.url(resource), Braise.Resource.name(resource)]
+
+    case resource_tuples do
+       [{:ok, url}, {:ok, name}] -> fill_template(url, template_string) |> ok_tuple
+       [{:error, msg}, {:ok, _}] -> {:error, msg}
+       [{:ok, _}, {:error, msg}] -> {:error, msg}
+       _ -> generate_from_resource(nil, nil)
     end
+
   end
 
   def generate_from_resource(_, _) do
