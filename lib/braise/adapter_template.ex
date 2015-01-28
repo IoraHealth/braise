@@ -23,19 +23,18 @@ defmodule Braise.AdapterTemplate do
     resource_tuples = [Braise.Resource.url(resource), Braise.Resource.name(resource)]
 
     case resource_tuples do
-       [{:ok, url}, {:ok, name}] -> fill_template(template_string, url) |> ok_tuple
+       [{:ok, url}, {:ok, name}] -> fill_template(template_string, url, name) |> ok_tuple
        [{:error, msg}, {:ok, _}] -> {:error, msg}
        [{:ok, _}, {:error, msg}] -> {:error, msg}
        _ -> generate_from_resource(nil, nil)
     end
-
   end
 
   def generate_from_resource(_, _) do
     { :error, "Invalid JSON Schema" }
   end
 
-  defp fill_template(template_string, uri, resource_name \\ "patient") do
+  defp fill_template(template_string, uri, resource_name) do
     replace_uri_variables(template_string, uri)
     |> replace_path_for_type_variable(resource_name)
   end
@@ -46,7 +45,7 @@ defmodule Braise.AdapterTemplate do
     |> String.replace(~r/<%= path %>/, path)
   end
 
-  defp replace_path_for_type_variable(template, "patient") do
+  defp replace_path_for_type_variable(template, resource_name) do
     String.replace(template, ~r/<%= path_for_type %>/, "")
   end
 
