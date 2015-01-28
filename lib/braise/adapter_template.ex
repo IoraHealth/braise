@@ -14,7 +14,6 @@ defmodule Braise.AdapterTemplate do
     namespace: "<%= path %>",
     token: Ember.computed.alias('accessTokenWrapper.token'),
     <%= path_for_type %>
-
     headers: function() {
       return {
         'AUTHORIZATION': 'Bearer ' + this.get('token');
@@ -103,10 +102,10 @@ defmodule Braise.AdapterTemplate do
   def replace_path_for_type_variable(template, resource_name) do
     replace_regex = ~r/<%= path_for_type %>/
     function = """
-    pathForType: function(type) {
-      var decamelized = Ember.String.decamelize(type);
-      return Ember.String.pluralize(decamelized);
-    },
+    \n  pathForType: function(type) {
+        var decamelized = Ember.String.decamelize(type);
+        return Ember.String.pluralize(decamelized);
+      },
     """
 
     replace = case String.match?(resource_name, ~r/_/) do
