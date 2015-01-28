@@ -48,4 +48,28 @@ defmodule AdapterTemplateTest do
     assert template == expected_template
   end
 
+  test "path_for_type does nothing when the resource_name has no underscores" do
+    simple_template = "<%= path_for_type %>"
+    resource = %Braise.Resource{links: [%{"href" => "http://piratebooty.biz/api"}], definitions: %{"patients" => {}}}
+  
+    {:ok, template} = generate_from_resource(resource, simple_template)
+
+    assert "" == template
+  end
+
+  test "path_for_type chucks in the function when the resource name has underscores" do
+    simple_template = "<%= path_for_type %>"
+    resource = %Braise.Resource{links: [%{"href" => "http://piratebooty.biz/api"}], definitions: %{"staff_members" => {}}}
+    expected_template = """
+    pathForType: function(type) {
+      var decamelized = Ember.String.decamelize(type);
+      return Ember.String.pluralize(decamelized);
+    },
+    """
+  
+    {:ok, template} = generate_from_resource(resource, simple_template)
+
+    assert expected_template == template
+  end
+
 end

@@ -46,7 +46,19 @@ defmodule Braise.AdapterTemplate do
   end
 
   defp replace_path_for_type_variable(template, resource_name) do
-    String.replace(template, ~r/<%= path_for_type %>/, "")
+    replace_regex = ~r/<%= path_for_type %>/
+    function = """
+    pathForType: function(type) {
+      var decamelized = Ember.String.decamelize(type);
+      return Ember.String.pluralize(decamelized);
+    },
+    """
+
+    if String.match?(resource_name, ~r/_/) do
+      String.replace(template, replace_regex, function)
+    else
+      String.replace(template, replace_regex, "")
+    end
   end
 
   defp ok_tuple(string) do
