@@ -7,6 +7,7 @@ defmodule Braise.AdapterTemplate do
     host: "<%= scheme %>://<%= host %>",
     namespace: "<%= path %>",
     token: Ember.computed.alias('accessTokenWrapper.token'),
+    <%= path_for_type %>
 
     headers: function() {
       return {
@@ -34,6 +35,7 @@ defmodule Braise.AdapterTemplate do
     String.replace(template_string, ~r/<%= scheme %>/, scheme)
     |> String.replace(~r/<%= host %>/, host)
     |> String.replace(~r/<%= path %>/, path)
+    |> String.replace(~r/<%= path_for_type %>/, "")
   end
 
   defp ok_tuple(string) do

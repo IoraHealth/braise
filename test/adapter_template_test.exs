@@ -13,6 +13,7 @@ defmodule AdapterTemplateTest do
       host: "http://production.icisapp.com",
       namespace: "/api/v2",
       token: Ember.computed.alias('accessTokenWrapper.token'),
+      
 
       headers: function() {
         return {
