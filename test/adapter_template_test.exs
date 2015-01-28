@@ -35,7 +35,6 @@ defmodule AdapterTemplateTest do
       namespace: "/api/v2",
       token: Ember.computed.alias('accessTokenWrapper.token'),
       
-
       headers: function() {
         return {
           'AUTHORIZATION': 'Bearer ' + this.get('token');
@@ -57,10 +56,10 @@ defmodule AdapterTemplateTest do
   test "path_for_type chucks in the function when the resource name has underscores" do
     simple_template = "<%= path_for_type %>"
     expected_template = """
-    pathForType: function(type) {
-      var decamelized = Ember.String.decamelize(type);
-      return Ember.String.pluralize(decamelized);
-    },
+    \n  pathForType: function(type) {
+        var decamelized = Ember.String.decamelize(type);
+        return Ember.String.pluralize(decamelized);
+      },
     """
   
     template = replace_path_for_type_variable(simple_template, "staff_members")
