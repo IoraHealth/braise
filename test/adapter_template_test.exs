@@ -1,7 +1,7 @@
 defmodule AdapterTemplateTest do
   use ExUnit.Case
 
-  import Braise.AdapterTemplate
+  import Braise.AdapterTemplate, only: [generate_from_resource: 1, generate_from_resource: 2, replace_path_for_type_variable: 2]
 
   test "invalid URI's are treated appropriately" do
     resource = %Braise.Resource{links: 'pirate booty', definitions: %{"patients" =>{}}}
@@ -49,17 +49,13 @@ defmodule AdapterTemplateTest do
   end
 
   test "path_for_type does nothing when the resource_name has no underscores" do
-    simple_template = "<%= path_for_type %>"
-    resource = %Braise.Resource{links: [%{"href" => "http://piratebooty.biz/api"}], definitions: %{"patients" => {}}}
-  
-    {:ok, template} = generate_from_resource(resource, simple_template)
+    template = replace_path_for_type_variable("<%= path_for_type %>", "patients")
 
     assert "" == template
   end
 
   test "path_for_type chucks in the function when the resource name has underscores" do
     simple_template = "<%= path_for_type %>"
-    resource = %Braise.Resource{links: [%{"href" => "http://piratebooty.biz/api"}], definitions: %{"staff_members" => {}}}
     expected_template = """
     pathForType: function(type) {
       var decamelized = Ember.String.decamelize(type);
@@ -67,7 +63,7 @@ defmodule AdapterTemplateTest do
     },
     """
   
-    {:ok, template} = generate_from_resource(resource, simple_template)
+    template = replace_path_for_type_variable(simple_template, "staff_members")
 
     assert expected_template == template
   end
