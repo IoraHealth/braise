@@ -1,12 +1,11 @@
 defmodule Braise.Model do
-  defstruct [:name, attributes: []]
 
   def parse_from_resource(resource = %Braise.Resource{}) do
     response    = Braise.ResponseParser.response(resource)
     definitions = Braise.DefinitionParser.definitions(resource)
     {:ok, name} = Braise.Resource.name(resource)
 
-    %Braise.Model{name: name, attributes: dereference_response(response, definitions)}
+    %{name: name, attributes: dereference_response(response, definitions)}
   end
 
   def dereference_response(response, definitions, dereferenced_response \\ [])
