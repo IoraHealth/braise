@@ -13,7 +13,7 @@ defmodule ResponseParserTest do
 
     resource = %Braise.Resource{definitions: %{"patient" => %{"properties" => response}}}
 
-    assert expected_result == Braise.ResponseParser.response(resource)
+    assert expected_result == response(resource)
   end
 
 end

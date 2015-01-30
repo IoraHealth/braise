@@ -1,4 +1,4 @@
-defmodule ResourceAttributeMapTest do
+defmodule ModelTest do
   use ExUnit.Case
 
   import Braise.Model, only: [dereference_response: 2]
