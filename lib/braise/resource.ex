@@ -19,6 +19,18 @@ defmodule Braise.Resource do
     {:error, "Invalid definition portion of JSON Schema"}
   end
 
+  def definitions(resource = %Braise.Resource{}) do
+    {:ok, resource_name} = name(resource)
+
+    resource.definitions[resource_name]["definitions"]
+  end
+
+  def response(resource = %Braise.Resource{}) do
+    {:ok, resource_name} = name(resource)
+
+    resource.definitions[resource_name]["properties"]
+  end
+
   defp ok_tuple(resource_name) do
     {:ok, resource_name}
   end
