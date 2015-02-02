@@ -139,7 +139,7 @@
           "$ref": "#/definitions/patient/definitions/middle_name"
         },
         "nickname": {
-          "$ref": "#/definitions/patient/definitions/nickanme"
+          "$ref": "#/definitions/patient/definitions/nickname"
         }
       },
       "type": [

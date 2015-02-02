@@ -40,5 +40,10 @@ defmodule Braise.CLI do
     resource       = Poison.decode!(file, as: Braise.Resource)
     {:ok, adapter} = Braise.AdapterTemplate.generate_from_resource(resource)
     IO.puts adapter
+
+    Braise.Model.parse_from_resource(resource)
+    |> Braise.ModelToEmberModel.convert
+    |> Braise.EmberModelTemplate.generate
+    |> IO.puts
   end
 end
