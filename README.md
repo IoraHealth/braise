@@ -24,6 +24,16 @@ braise -f <JSON_SCHEMA_FILE>
 
 Takes that boring JSON schema file and outputs some much better files.
 
+PREREQUISITES
+-------------
+
+```
+brew install elixir
+mix deps.get
+mix escript.build
+mv braise bin
+```
+
 LICENSE
 -------
 
