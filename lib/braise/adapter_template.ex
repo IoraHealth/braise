@@ -16,7 +16,7 @@ defmodule Braise.AdapterTemplate do
     <%= path_for_type %>
     headers: function() {
       return {
-        'AUTHORIZATION': 'Bearer ' + this.get('token');
+        'AUTHORIZATION': 'Bearer ' + this.get('token')
       };
     }.property('token')
   });
@@ -34,8 +34,8 @@ defmodule Braise.AdapterTemplate do
     iex > Braise.AdapterTemplate.generate_from_resource(resource)
     {:ok,
      "import DS from 'ember-data';\nimport Ember from 'ember';\n
-     \nexport default DS.RESTAdapter.extend({\n  host: \"http://bizdev.biz\",\n  
-     namespace: \"/api/v1\",\n  token: Ember.computed.alias('accessTokenWrapper.token'),\n  \n\n  
+     \nexport default DS.RESTAdapter.extend({\n  host: \"http://bizdev.biz\",\n
+     namespace: \"/api/v1\",\n  token: Ember.computed.alias('accessTokenWrapper.token'),\n  \n\n
      headers: function() {\n    return {\n      'AUTHORIZATION': 'Bearer ' + this.get('token');\n
      };\n  }.property('token')\n});\n"
     }
@@ -49,13 +49,13 @@ defmodule Braise.AdapterTemplate do
     iex > Braise.AdapterTemplate.generate_From_resource(%Braise.Resource{definitions: "Pirate Booty", links: [%{"href" => "http://piratebooty.biz/"}])
     {:error, "Invalid definitions portion of JSON Schema"}
 
-    
+
   """
   def generate_from_resource(resource = %Braise.Resource{}, template_string) do
     resource_tuples = [Braise.Resource.url(resource), Braise.Resource.name(resource)]
 
     case resource_tuples do
-       [{:ok, url}, {:ok, name}] -> replace_template_variables(template_string, url, name) |> ok_tuple
+       [{:ok, url}, {:ok, name}] -> replace_template_variables(template_string, url, name) |> ok_tuple(name)
        [{:error, msg}, {:ok, _}] -> {:error, msg}
        [{:ok, _}, {:error, msg}] -> {:error, msg}
        _ -> generate_from_resource(nil, nil)
@@ -83,7 +83,7 @@ defmodule Braise.AdapterTemplate do
   def replace_uri_variables(template, %{host: host, path: path, scheme: scheme}) do
     String.replace(template, ~r/<%= scheme %>/, scheme)
     |> String.replace(~r/<%= host %>/, host)
-    |> String.replace(~r/<%= path %>/, path)
+    |> String.replace(~r/<%= path %>/, String.slice(path, 1..-1))
   end
 
   @doc """
@@ -116,7 +116,7 @@ defmodule Braise.AdapterTemplate do
     String.replace(template, replace_regex, replace)
   end
 
-  defp ok_tuple(string) do
-    {:ok, string}
+  defp ok_tuple(body, name) do
+    {:ok, name, body}
   end
 end

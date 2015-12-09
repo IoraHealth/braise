@@ -29,20 +29,20 @@ defmodule AdapterTemplateTest do
     expected_template = """
     import DS from 'ember-data';
     import Ember from 'ember';
-    
+
     export default DS.RESTAdapter.extend({
       host: "http://production.icisapp.com",
-      namespace: "/api/v2",
+      namespace: "api/v2",
       token: Ember.computed.alias('accessTokenWrapper.token'),
       
       headers: function() {
         return {
-          'AUTHORIZATION': 'Bearer ' + this.get('token');
+          'AUTHORIZATION': 'Bearer ' + this.get('token')
         };
       }.property('token')
     });
     """
-    {:ok, template } = generate_from_resource(resource)
+    {:ok, "patients", template } = generate_from_resource(resource)
 
     assert template == expected_template
   end
@@ -61,7 +61,7 @@ defmodule AdapterTemplateTest do
         return Ember.String.pluralize(decamelized);
       },
     """
-  
+
     template = replace_path_for_type_variable(simple_template, "staff_members")
 
     assert expected_template == template
