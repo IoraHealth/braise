@@ -52,23 +52,17 @@ defmodule Braise.AdapterTemplate do
 
   """
   def generate_from_resource(resource = %Braise.Resource{}, template_string) do
-    resource_tuples = [Braise.Resource.url(resource), Braise.Resource.name(resource)]
-
-    case resource_tuples do
-       [{:ok, url}, {:ok, name}] -> replace_template_variables(template_string, url, name) |> ok_tuple(name)
-       [{:error, msg}, {:ok, _}] -> {:error, msg}
-       [{:ok, _}, {:error, msg}] -> {:error, msg}
-       _ -> generate_from_resource(nil, nil)
-    end
+    replace_template_variables(template_string, resource)
+    |> ok_tuple(resource.name)
   end
 
   def generate_from_resource(_, _) do
     { :error, "Invalid JSON Schema" }
   end
 
-  def replace_template_variables(template_string, uri, resource_name) do
-    replace_uri_variables(template_string, uri)
-    |> replace_path_for_type_variable(resource_name)
+  def replace_template_variables(template_string, resource) do
+    replace_uri_variables(template_string, resource.url)
+    |> replace_path_for_type_variable(resource.name)
   end
 
   @doc """

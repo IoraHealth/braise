@@ -3,20 +3,6 @@ defmodule AdapterTemplateTest do
 
   import Braise.AdapterTemplate, only: [generate_from_resource: 1, generate_from_resource: 2, replace_path_for_type_variable: 2]
 
-  test "invalid URI's are treated appropriately" do
-    resource = %Braise.Resource{links: 'pirate booty', definitions: %{"patients" =>{}}}
-    {:error, msg} = generate_from_resource(resource)
-
-    assert msg == "Invalid links portion of JSON Schema"
-  end
-
-  test "invalid resource names are treated appropriately" do
-    resource = %Braise.Resource{links: [%{"href" => "http://piratebooty.biz"}], definitions: "pirate town"}
-    {:error, msg} = generate_from_resource(resource)
-
-    assert msg == "Invalid definition portion of JSON Schema"
-  end
-
   test "an invalid json schema produces an error" do
     json = %{"pirate_town" => "YISSSS"}
     {:error, msg } = generate_from_resource(json)
@@ -25,7 +11,7 @@ defmodule AdapterTemplateTest do
   end
 
   test "a valid link section produces a good template" do
-    resource = %Braise.Resource{links: [%{"href" => "http://production.icisapp.com/api/v2"}], definitions: %{"patients" => {}}}
+    resource = %Braise.Resource{url: URI.parse("http://production.icisapp.com/api/v2"), name: "patients"}
     expected_template = """
     import DS from 'ember-data';
     import Ember from 'ember';

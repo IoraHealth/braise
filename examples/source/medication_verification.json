@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "type": [
+    "object"
+  ],
+  "definitions": {
+    "medication_verification": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Medication Verification Resource",
+      "description": "API for knowing whether a patient's medication has been verified",
+      "type": [
+        "object"
+      ],
+      "properties": {
+        "medication_verification": {
+          "type": [
+            "object"
+          ],
+          "properties": {
+            "patient_guid": {
+              "description": "The patient's GUID",
+              "example": "7b678e3a85316ac3b16e4be3ffd33011",
+              "format": "uuid",
+              "type": [
+                "string"
+              ]
+            },
+            "verified_by_uid": {
+              "description": "The UID of the practice user who validated the patient's medications",
+              "example": "7b678e3a85316ac3b16e4be3ffd33011",
+              "format": "uuid",
+              "type": [
+                "string"
+              ]
+            },
+            "verified_by_name": {
+              "description": "The name of the practice user who validated the patient's medications",
+              "example": "Fred Jones",
+              "type": [
+                "string"
+              ]
+            },
+            "verified_at": {
+              "description": "When the practice user valided the patient's medications",
+              "type": [
+                "string"
+              ],
+              "format": "date",
+              "example": "2015-11-24T10:11:12Z"
+            }
+          },
+          "required": [
+            "patient_guid",
+            "verified_by_uid",
+            "verified_by_name",
+            "verified_at"
+          ]
+        }
+      },
+      "required": [
+        "medication_verification"
+      ]
+    }
+  },
+  "properties": {
+    "medication_verification": {
+      "$ref": "#/definitions/medication_verification"
+    }
+  },
+  "title": "Medication Verification API v1",
+  "description": "Medication Verification API v1",
+  "id": "medication-verification-v1",
+  "links": [
+    {
+      "href": "https://production.icisapp.com/api/patients/v1",
+      "rel": "self"
+    }
+  ]
+}

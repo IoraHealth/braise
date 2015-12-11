@@ -1,7 +1,7 @@
-defmodule ResponseParserTest do
+defmodule ResourceDefinitionTuplesTest do
   use ExUnit.Case
 
-  import Braise.ResponseParser, only: [response: 1]
+  import Braise.ResourceDefinitionTuples, only: [map: 1]
 
   test "response/1 returns a tuple of response attr and definition key" do
     response = %{"dob" =>        %{"$ref" => "#/definitions/patient/definitions/dob"},
@@ -11,9 +11,9 @@ defmodule ResponseParserTest do
 
     expected_result = [{"dob", "dob"}, {"email", "email"}, {"first_name", "first_name"}, {"guid", "pirate"}]
 
-    resource = %Braise.Resource{definitions: %{"patient" => %{"properties" => response}}}
+    resource = %Braise.Resource{response: response}
 
-    assert expected_result == response(resource)
+    assert expected_result == map(resource)
   end
 
 end

@@ -1,8 +1,17 @@
-defmodule Braise.ResponseParser do
-  def response(resource = %Braise.Resource{}) do
-    {:ok, resource_name} = Braise.Resource.name(resource)
+defmodule Braise.ResourceDefinitionTuples do
+  @moduledoc """
+  Provides a mapping between the response attributes of
+  a RESTful resource and the name used to define said
+  attributes in a different section of the Schema.
+  """
 
-    Dict.to_list(resource.definitions[resource_name]["properties"])
+  @doc"""
+  Returns a tuple of response attribute and the name
+  to lookup for its type, format, and other meta data
+  within the definition section of the resource.
+  """
+  def map(resource = %Braise.Resource{}) do
+    Dict.to_list(resource.response)
     |> flatten_response
   end
 
