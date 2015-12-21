@@ -37,7 +37,13 @@ defmodule Braise.CLI do
   def process({:file, filename, :output, output}) do
     {:ok, file} = File.read(filename)
 
-    resource       = Poison.decode!(file, as: Braise.Resource)
+    Poison.decode!(file, as: Braise.Schema)
+    |> Braise.Schema.resources
+    |> write_adapters_and_models(output)
+  end
+
+  def write_adapters_and_models([], _), do: true
+  def write_adapters_and_models([resource | tail], output) do
     {:ok, name, adapter} = Braise.AdapterTemplate.generate_from_resource(resource)
 
     adapter_filename = output <> "/addon/adapters/" <> name <> ".js"
@@ -49,6 +55,8 @@ defmodule Braise.CLI do
     |> Braise.ModelToEmberModel.convert
     |> Braise.EmberModelTemplate.generate
     |> write_to_file(model_filename)
+
+    write_adapters_and_models(tail, output)
   end
 
   def write_to_file(content, filename) do
