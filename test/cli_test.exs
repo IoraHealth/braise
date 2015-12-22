@@ -1,7 +1,9 @@
 defmodule CLITest do
   use ExUnit.Case
 
-  import Braise.CLI, only: [ parse_options: 1 ]
+  import Braise.CLI, only: [
+    parse_options: 1, read_file: 1, version_from!: 1, output_filename_for: 4
+  ]
 
   test "passing --help or -h into parse_options returns :help" do
     assert parse_options(["-h", "science"]) == :help
@@ -30,5 +32,25 @@ defmodule CLITest do
 
   test "passing an empty list into parse_options returns :help" do
     assert parse_options([]) == :help
+  end
+
+  test "path not following our version convention raises error" do
+    assert_raise File.Error, "could not read file bad/path/that/does/not/exist.json: no such file or directory", fn ->
+      read_file("bad/path/that/does/not/exist.json")
+    end
+  end
+
+  test "path that doesn't match our versioning pattern raises an error" do
+    assert_raise File.Error, "could not find version from path path/withoiut/version/resource.json: unknown POSIX error", fn ->
+      version_from!("path/withoiut/version/resource.json")
+    end
+  end
+
+  test "version can be extracted from path" do
+    assert version_from!("path/to/v123/resource.json") == "v123"
+  end
+
+  test "builds a proper output file path" do
+    assert output_filename_for("/tmp/addon", "model", "v123", "patient") == "/tmp/addon/model/v123/patient.js"
   end
 end

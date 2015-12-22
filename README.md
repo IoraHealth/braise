@@ -34,6 +34,16 @@ mix escript.build
 mv braise bin
 ```
 
+EXAMPLES
+--------
+
+The examples dir has some input json schemas and the corresponding output produced by braise.  To regenerate them
+
+```
+braise --file examples/source/v3/patients.json --output examples/output
+braise --file examples/source/v20150918/sponsor_api.json --output examples/output
+```
+
 LICENSE
 -------
 
