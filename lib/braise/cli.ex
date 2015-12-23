@@ -35,28 +35,28 @@ defmodule Braise.CLI do
   end
 
   def process({:file, filename, :output, output}) do
-    {:ok, file} = File.read(filename)
+    {:ok, file, version} = read_file(filename)
 
     Poison.decode!(file, as: Braise.Schema)
     |> Braise.Schema.resources
-    |> write_adapters_and_models(output)
+    |> write_adapters_and_models(version, output)
   end
 
-  def write_adapters_and_models([], _), do: true
-  def write_adapters_and_models([resource | tail], output) do
+  def write_adapters_and_models([], _, _), do: true
+  def write_adapters_and_models([resource | tail], version, output) do
     {:ok, name, adapter} = Braise.AdapterTemplate.generate_from_resource(resource)
 
-    adapter_filename = output <> "/addon/adapters/" <> name <> ".js"
+    adapter_filename = output_filename_for(output, "adapters", version, name)
     write_to_file(adapter, adapter_filename)
 
-    model_filename = output <> "/addon/models/" <> name <> ".js"
+    model_filename = output_filename_for(output, "model", version, name)
 
     Braise.Model.parse_from_resource(resource)
     |> Braise.ModelToEmberModel.convert
     |> Braise.EmberModelTemplate.generate
     |> write_to_file(model_filename)
 
-    write_adapters_and_models(tail, output)
+    write_adapters_and_models(tail, version, output)
   end
 
   def write_to_file(content, filename) do
@@ -64,4 +64,27 @@ defmodule Braise.CLI do
       IO.binwrite file, content
     end)
   end
+
+  def read_file(filename) do
+    file = File.read!(filename)
+    version = version_from!(filename)
+
+    {:ok, file, version}
+  end
+
+  def version_from!(path) do
+    captures = Regex.named_captures(~r/\/(?<version>v\d+)\//, path)
+    if is_map(captures) do
+      Dict.get(captures, "version")
+    else
+      raise File.Error, reason: "does not follow our version convention", action: "find version from path", path: path
+    end
+  end
+
+  def output_filename_for(base_dir, type, version, name) do
+    dir = Enum.join([base_dir, type, version], "/")
+    File.mkdir_p(dir)
+    Enum.join([dir, "/", name, ".js"], "")
+  end
+
 end
