@@ -9,9 +9,9 @@ defmodule Braise.Model do
   name.
 
   ## Examples
-  iex > resource = %Braise.Resource{name: "pirate", definition: %{"name" => "booty"}, response: %{"name" => "name"}}
-  iex > Braise.Model.parse_from_resource(resource)
-  %Braise.Model{name: "pirate", attributes: [%Braise.Attribute{name: "name", type: null, format: null}]}
+      iex > resource = %Braise.Resource{name: "pirate", definition: %{"name" => "booty"}, response: %{"name" => "name"}}
+      iex > Braise.Model.parse_from_resource(resource)
+      %Braise.Model{name: "pirate", attributes: [%Braise.Attribute{name: "name", type: null, format: null}]}
   """
   def parse_from_resource(resource = %Braise.Resource{}) do
     %Braise.Model{name: resource.name, attributes: dereference_response(resource)}

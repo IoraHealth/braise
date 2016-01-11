@@ -30,27 +30,26 @@ defmodule Braise.AdapterTemplate do
   or an error message.
 
   ## Examples
-    iex > resource = %Braise.Resource{definitions: %{"patients" =>{}},
-                                      links: [%{"href" => "http://bizdev.biz/api/v1"}]}
-    iex > Braise.AdapterTemplate.generate_from_resource(resource)
-    {:ok,
-     "import DS from 'ember-data';\nimport Ember from 'ember';\n
-     \nexport default DS.RESTAdapter.extend({\n  host: \"http://bizdev.biz\",\n
-     namespace: \"/api/v1\",\n  token: Ember.computed.alias('accessTokenWrapper.token'),\n  \n\n
-     headers: function() {\n    return {\n      'AUTHORIZATION': 'Bearer ' + this.get('token');\n
-     };\n  }.property('token')\n});\n"
-    }
 
-    iex > Braise.AdapterTemplate.generate_from_resource(%{})
-    {:error, "Invalid JSON Schema"}
+      iex > resource = %Braise.Resource{definitions: %{"patients" =>{}},
+                                        links: [%{"href" => "http://bizdev.biz/api/v1"}]}
+      iex > Braise.AdapterTemplate.generate_from_resource(resource)
+      {:ok,
+       "import DS from 'ember-data';\nimport Ember from 'ember';\n
+       \nexport default DS.RESTAdapter.extend({\n  host: \"http://bizdev.biz\",\n
+       namespace: \"/api/v1\",\n  token: Ember.computed.alias('accessTokenWrapper.token'),\n  \n\n
+       headers: function() {\n    return {\n      'AUTHORIZATION': 'Bearer ' + this.get('token');\n
+       };\n  }.property('token')\n});\n"
+      }
 
-    iex > Braise.AdapterTemplate.generate_from_resource(%Braise.Resource{definitions: %{"patients" => {}}, links: "Pirate Booty"})
-    {:error, "Invalid links portion of JSON Schema"}
+      iex > Braise.AdapterTemplate.generate_from_resource(%{})
+      {:error, "Invalid JSON Schema"}
 
-    iex > Braise.AdapterTemplate.generate_From_resource(%Braise.Resource{definitions: "Pirate Booty", links: [%{"href" => "http://piratebooty.biz/"}])
-    {:error, "Invalid definitions portion of JSON Schema"}
+      iex > Braise.AdapterTemplate.generate_from_resource(%Braise.Resource{definitions: %{"patients" => {}}, links: "Pirate Booty"})
+      {:error, "Invalid links portion of JSON Schema"}
 
-
+      iex > Braise.AdapterTemplate.generate_From_resource(%Braise.Resource{definitions: "Pirate Booty", links: [%{"href" => "http://piratebooty.biz/"}])
+      {:error, "Invalid definitions portion of JSON Schema"}
   """
   def generate_from_resource(resource = %Braise.Resource{}, template_string) do
     replace_template_variables(template_string, resource)

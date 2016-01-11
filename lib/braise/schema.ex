@@ -26,12 +26,12 @@ defmodule Braise.Schema do
   the root of the API we are trying to build Ember files out of.
 
   ## Examples
-  iex > Braise.Schema.url([%{"href" => http://bizdev.lol"}])
-  {:ok, %URI{authority: "bizdev.lol", fragment: nil, host: "bizdev.lol", path: nil,
 
-  iex > Braise.Schema.url("imma invalid schema")
-  {:error, "Invalid links portion of JSON Schema"}
- port: 80, query: nil, scheme: "http", userinfo: nil}
+      iex > Braise.Schema.url([%{"href" => "http://bizdev.lol"}])
+      {:ok, %URI{authority: "bizdev.lol", fragment: nil, host: "bizdev.lol", path: nil, port: 80, query: nil, scheme: "http", userinfo: nil}
+
+      iex > Braise.Schema.url("imma invalid schema")
+      {:error, "Invalid links portion of JSON Schema"}
   """
   def url([%{"href" => uri}]), do: {:ok, URI.parse(uri)}
   def url(_), do: {:error, "Invalid links portion of JSON Schema"}

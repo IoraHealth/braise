@@ -28,7 +28,9 @@ defmodule Braise.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    [{:poison, "~> 1.3.1"}]
+    [{:poison, "~> 1.3.1"},
+     {:earmark, "~> 0.2", only: :dev},
+     {:ex_doc, "~> 0.11", only: :dev}]
   end
 
   defp escript_config do
