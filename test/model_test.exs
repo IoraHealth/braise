@@ -12,7 +12,8 @@ defmodule ModelTest do
   end
 
   def response do
-    %{"guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"}, "first_name" => %{ "$ref" => "/definitions/pirate/definitions/first-name"}}
+    %{"guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"},
+      "first_name" => %{ "name" => "first_name", "type" => ["pirate"], "format" => nil } }
   end
 
   def definition do

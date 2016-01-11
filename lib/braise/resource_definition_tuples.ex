@@ -10,9 +10,8 @@ defmodule Braise.ResourceDefinitionTuples do
   to lookup for its type, format, and other meta data
   within the definition section of the resource.
   """
-  def map(resource = %Braise.Resource{}) do
-    Dict.to_list(resource.response)
-    |> flatten_response
+  def map(references) do
+    flatten_response(references)
   end
 
   defp flatten_response(tuples, memo \\ [])
