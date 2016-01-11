@@ -3,10 +3,12 @@ defmodule Braise.Mixfile do
 
   def project do
     [app: :braise,
-     version: "0.0.1",
+     version: "0.1.0",
      elixir: "~> 1.0",
      escript: escript_config,
-     deps: deps]
+     description: "A library that converts JSON Schema into ember models/adapters.",
+     deps: deps,
+     package: package]
   end
 
   # Configuration for the OTP application
@@ -31,5 +33,11 @@ defmodule Braise.Mixfile do
 
   defp escript_config do
     [ main_module: Braise.CLI ]
+  end
+
+  defp package do
+    [maintainers: ["Patrick Robertson", "Alex Rothenberg"],
+     licenses: ["MIT"],
+     links: %{github: "https://github.com/patricksrobertson/secure_random.ex"}]
   end
 end
