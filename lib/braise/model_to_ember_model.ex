@@ -4,10 +4,7 @@ defmodule Braise.ModelToEmberModel do
   end
 
   def convert_attributes(model_attributes, converted_attributes \\ []) 
-  def convert_attributes([], converted_attributes) do
-    IO.puts inspect(converted_attributes)
-    converted_attributes
-  end
+  def convert_attributes([], converted_attributes), do: converted_attributes
 
   def convert_attributes([head | tail], converted_attributes) do
     convert_attributes(tail, converted_attributes ++ [strip_and_convert_attribute(head)])
