@@ -15,7 +15,7 @@ defmodule Braise.ModelToEmberModel do
     |> convert_attribute
   end
 
-  def convert_attribute(attribute) do
+  defp convert_attribute(attribute) do
     case attribute do
       %{ type: ["boolean"], format: _, name: name} -> %{ name: name, type: "boolean" }
       %{ type: ["string"], format: "date-time", name: name} -> %{name: name, type: "date"}
