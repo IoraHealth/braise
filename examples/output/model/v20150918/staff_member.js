@@ -3,12 +3,12 @@ import DS from 'ember-data';
 
 export default Staff_member = DS.Model.extend({
   default_location: DS.attr(),
-  degree: DS.attr(),
+  degree: DS.attr("string"),
   first_name: DS.attr("string"),
   last_name: DS.attr("string"),
   photos: DS.attr(),
   role: DS.attr("string"),
   speciality: DS.attr(),
-  suffix: DS.attr(),
+  suffix: DS.attr("string"),
   uid: DS.attr("string")
 });
