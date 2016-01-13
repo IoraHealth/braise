@@ -90,15 +90,15 @@ defmodule Braise.AdapterTemplate do
     iex > Braise.AdapterTemplate.replace_path_for_type_variable(template, "patient")
     ""
     iex > Braise.AdapterTemplate.replace_path_for_type_variable(template, "staff_members")
-    "pathForType: function(type) {\n  var decamelized = Ember.String.decamelize(type);\n  return Ember.String.pluralize(decamelized);\n},\n"
+    "pathForType: function(type) {\n  var underscorized = Ember.String.underscore(type);\n  return Ember.String.pluralize(underscorized);\n},\n"
   """
 
   def replace_path_for_type_variable(template, resource_name) do
     replace_regex = ~r/<%= path_for_type %>/
     function = """
     \n  pathForType: function(type) {
-        var decamelized = Ember.String.decamelize(type);
-        return Ember.String.pluralize(decamelized);
+        var underscorized = Ember.String.underscore(type);
+        return Ember.String.pluralize(underscorized);
       },
     """
 

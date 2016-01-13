@@ -44,8 +44,8 @@ defmodule AdapterTemplateTest do
     simple_template = "<%= path_for_type %>"
     expected_template = """
     \n  pathForType: function(type) {
-        var decamelized = Ember.String.decamelize(type);
-        return Ember.String.pluralize(decamelized);
+        var underscorized = Ember.String.underscore(type);
+        return Ember.String.pluralize(underscorized);
       },
     """
 
