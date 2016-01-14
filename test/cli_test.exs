@@ -51,6 +51,6 @@ defmodule CLITest do
   end
 
   test "builds a proper output file path" do
-    assert output_filename_for("/tmp/addon", "model", "v123", "patient") == "/tmp/addon/model/v123/patient.js"
+    assert output_filename_for("/tmp/addon", "model", "v123", "concise_patient") == "/tmp/addon/model/v123/concise-patient.js"
   end
 end
