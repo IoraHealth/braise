@@ -17,7 +17,7 @@ defmodule ModelTest do
   end
 
   def definition do
-    %{"guid" => %{ "type" => ["string"]}, "first-name" => %{ "type" => ["pirate"]}}
+    %{"guid" => %{ "type" => ["string"]}, "first_name" => %{ "type" => ["pirate"]}}
   end
 
   def resource do
@@ -29,10 +29,10 @@ defmodule ModelTest do
   end
 
   def first_name_attribute do
-    %Braise.Attribute{name: "first_name", type: "pirate", format: nil}
+    %Braise.Attribute{name: "first_name", type: ["pirate"], format: nil}
   end
 
   def guid_attribute do
-    %Braise.Attribute{name: "guid", type: "string", format: nil}
+    %Braise.Attribute{name: "guid", type: ["string"], format: nil}
   end
 end

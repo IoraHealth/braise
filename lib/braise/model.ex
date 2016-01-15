@@ -14,32 +14,12 @@ defmodule Braise.Model do
       %Braise.Model{name: "pirate", attributes: [%Braise.Attribute{name: "name", type: null, format: null}]}
   """
   def parse_from_resource(resource = %Braise.Resource{}) do
-    %Braise.Model{name: resource.name, attributes: dereference_response(resource)}
+    attributes = Braise.Dereferencer.dereference(resource.definition, resource.response)
+      |> Enum.map(fn(element)-> map_attribute(element) end)
+    %Braise.Model{name: resource.name, attributes: attributes}
   end
 
-  defp dereference_response(resource, collection \\ []) do
-    {references, non_references} =  Enum.partition(resource.response,  fn(e) ->
-      Dict.get(elem(e,1), "$ref")
-    end)
-
-    attributes = Enum.map(non_references, fn(non_reference)->
-      map_attribute(elem(non_reference, 0), elem(non_reference, 1))
-    end)
-
-    Braise.ResourceDefinitionTuples.map(references)
-    |> dereference_response(resource.definition, attributes ++ collection)
-  end
-
-  defp dereference_response([], _, collection), do: collection
-  defp dereference_response([{key, value} | tail], definitions, collection) do
-    reference = Dict.get(definitions, value)
-
-    dereference_response(tail, definitions, collection ++ [map_attribute(key, reference)])
-  end
-
-  defp map_attribute(key, definition) do
-    type = List.to_string(definition["type"])
-    type = List.to_string(definition["type"])
-    %Braise.Attribute{name: key, type: type, format: definition["format"]}
+  defp map_attribute(element) do
+    %Braise.Attribute{name: element["name"], type: element["type"], format: element["format"]}
   end
 end
