@@ -4,13 +4,18 @@ defmodule DereferencerTest do
   import Braise.Dereferencer, only: [dereference: 2]
 
   test "dereference/2 pulls the inline first_name" do
-    assert first_name == List.first(dereference(response, definition))
+    assert first_name == Enum.at(dereference(response, definition), 0)
   end
 
   test "dereference/2 pulls the guid from the definitions" do
     guid_with_name = %{ "name" => "guid", "type" => ["string"]}
-    assert guid_with_name == List.last(dereference(response, definition))
+    assert guid_with_name == Enum.at(dereference(response, definition), 1)
   end
+
+  # test "dereference/2 pulls definitions recursively" do
+  #   guid_with_name = %{ "name" => "guid", "type" => ["string"]}
+  #   assert guid_with_name == Enum.at(dereference(response, definition), 2)
+  # end
 
   def first_name do
     %{ "name" => "first_name", "type" => ["pirate"], "format" => nil }

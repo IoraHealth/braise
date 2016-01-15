@@ -12,20 +12,16 @@ defmodule ModelTest do
   end
 
   def response do
-    %{"guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"},
-      "first_name" => %{ "name" => "first_name", "type" => ["pirate"], "format" => nil } }
-  end
-
-  def definition do
-    %{"guid" => %{ "type" => ["string"]}, "first_name" => %{ "type" => ["pirate"]}}
+    [%{"name" => "guid",  "type" => ["string"]},
+     %{"name" => "first_name", "type" => ["pirate"], "format" => nil }]
   end
 
   def resource do
-    %Braise.Resource{name: "pirate", definition: definition, response: response}
+    %Braise.Resource{name: "pirate", response: response}
   end
 
   def attributes do
-    [first_name_attribute, guid_attribute]
+    [guid_attribute, first_name_attribute]
   end
 
   def first_name_attribute do

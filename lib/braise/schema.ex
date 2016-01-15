@@ -4,14 +4,14 @@ defmodule Braise.Schema do
   JSON Schema.
   """
 
-  defstruct [:definitions, :description, :id, :links, :properties, :title, :type]
+  defstruct [:definitions, :description, :id, :links, :properties, :title, :type, :links]
 
   @doc"""
   Returns a collection of resources that we can generate adapter
-  and model files from. The resource is the combination of a 
+  and model files from. The resource is the combination of a
   name, uri, definition, and response.
 
-  The response represents what should be returned by the 
+  The response represents what should be returned by the
   specific resource, the definition contains specifically what
   each attribute in the response means. We have to later dereference
   the response with the provided definition.
@@ -38,11 +38,14 @@ defmodule Braise.Schema do
 
   defp resources([], _, collection), do: collection
   defp resources([{key, _} | tail], schema, collection) do
-    response = response_lookup(schema, key)
     definition = definition_lookup(schema, key)
+    response = response_lookup(schema, key)
+    |> Braise.Dereferencer.dereference(definition)
+    links = links_lookup(schema, key)
+    |> Enum.map(fn(link)-> Braise.Dereferencer.dereference(link, definition) end)
     {:ok, uri} = url(schema.links)
 
-    new_resource = %Braise.Resource{name: key, url: uri, definition: definition, response: response}
+    new_resource = %Braise.Resource{name: key, url: uri, response: response, links: links}
     resources(tail, schema, collection ++[new_resource])
   end
 
@@ -52,6 +55,10 @@ defmodule Braise.Schema do
 
   defp response_lookup(schema, resource_name) do
     lookup(schema, resource_name, "properties")
+  end
+
+  defp links_lookup(schema, resource_name) do
+    IO.inspect lookup(schema, resource_name, "links")
   end
 
   defp lookup(schema, resource_name, type) do

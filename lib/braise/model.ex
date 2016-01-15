@@ -14,8 +14,7 @@ defmodule Braise.Model do
       %Braise.Model{name: "pirate", attributes: [%Braise.Attribute{name: "name", type: null, format: null}]}
   """
   def parse_from_resource(resource = %Braise.Resource{}) do
-    attributes = Braise.Dereferencer.dereference(resource.definition, resource.response)
-      |> Enum.map(fn(element)-> map_attribute(element) end)
+    attributes = Enum.map(resource.response, fn(element)-> map_attribute(element) end)
     %Braise.Model{name: resource.name, attributes: attributes}
   end
 

@@ -1,23 +1,42 @@
 defmodule Braise.Dereferencer do
 
-  def dereference(resources, definitions) do
-    {references, non_references} =  Enum.partition(resources,  fn(e) ->
-      Dict.get(elem(e,1), "$ref")
-    end)
-    non_reference_values = Enum.map(non_references, fn({key,value})->
-      Map.put(value, "name", key)
-    end)
+  def dereference(resources, definitions) when is_map(resources) do
+    dereference(Map.to_list(resources), definitions)
+  end
 
-    Braise.ResourceDefinitionTuples.map(references)
-    |> dereference(definitions, non_reference_values)
+  def dereference(resources, definitions) when is_list(resources) do
+    dereference(resources, definitions, [])
+  end
+
+  def dereference(resource, _) do
+    resource
   end
 
   defp dereference([], _, collection), do: collection
-  defp dereference([{key, value} | tail], definitions, collection) do
-    dereferenced = Dict.get(definitions, value)
-    dereferenced_with_name = Map.put(dereferenced, "name", key)
+  defp dereference([{key, %{"$ref" => reference} } | tail], definitions, collection) do
+    definition_key = reference_to_definition_key(reference)
+    dereferenced = Dict.get(definitions, definition_key)
+
+    dereference([{key, dereferenced} | tail], definitions, collection)
+  end
+
+  defp dereference([{key, value} | tail], definitions, collection) when is_map(value) do
+    dereferenced_with_name = Map.put(value, "name", key)
 
     dereference(tail, definitions, collection ++ [dereferenced_with_name])
+  end
+
+  defp dereference([{key, value} | tail], definitions, collection) do
+    dereferenced_with_name = %{"name" => value}
+
+    dereference(tail, definitions, collection ++ [dereferenced_with_name])
+  end
+
+  defp reference_to_definition_key(reference) do
+    regex = ~r/\/definitions\/.*\/definitions\/(?<attribute>.*)/
+
+    Regex.named_captures(regex, reference)
+    |> Dict.get("attribute")
   end
 
 end
