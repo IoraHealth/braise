@@ -39,10 +39,13 @@ defmodule Braise.Schema do
   defp resources([], _, collection), do: collection
   defp resources([{key, _} | tail], schema, collection) do
     definition = definition_lookup(schema, key)
+
     response = response_lookup(schema, key)
     |> Braise.Dereferencer.dereference(definition)
+
     links = links_lookup(schema, key)
-    |> Enum.map(fn(link)-> Braise.Dereferencer.dereference(link, definition) end)
+    |> Enum.map(fn(link)-> Braise.LinkAction.name(key, link) end)
+
     {:ok, uri} = url(schema.links)
 
     new_resource = %Braise.Resource{name: key, url: uri, response: response, links: links}
@@ -58,7 +61,7 @@ defmodule Braise.Schema do
   end
 
   defp links_lookup(schema, resource_name) do
-    IO.inspect lookup(schema, resource_name, "links")
+    lookup(schema, resource_name, "links")
   end
 
   defp lookup(schema, resource_name, type) do

@@ -1,5 +1,5 @@
 defmodule Braise.Model do
-  defstruct [:name, :attributes]
+  defstruct [:name, :attributes, :actions]
   @moduledoc"""
   Representation of a RESTful resource with a name plus a collection of attributes.
   """
@@ -15,7 +15,10 @@ defmodule Braise.Model do
   """
   def parse_from_resource(resource = %Braise.Resource{}) do
     attributes = Enum.map(resource.response, fn(element)-> map_attribute(element) end)
-    %Braise.Model{name: resource.name, attributes: attributes}
+    actions = %{
+      unsupported: Braise.LinkAction.unsupported_restful_actions(resource.links),
+      non_restful: Braise.LinkAction.non_restful_actions(resource.links)}
+    %Braise.Model{name: resource.name, attributes: attributes, actions: actions, actions: actions}
   end
 
   defp map_attribute(element) do

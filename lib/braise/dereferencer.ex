@@ -16,6 +16,8 @@ defmodule Braise.Dereferencer do
     resource
   end
 
+
+
   defp dereference([], _, collection), do: collection
   defp dereference([{key, %{"$ref" => reference} } | tail], definitions, collection) do
     definition_key = reference_to_definition_key(reference)

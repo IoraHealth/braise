@@ -17,7 +17,7 @@ defmodule ModelTest do
   end
 
   def resource do
-    %Braise.Resource{name: "pirate", response: response}
+    %Braise.Resource{name: "pirate", response: response, links: []}
   end
 
   def attributes do
