@@ -12,10 +12,24 @@ defmodule DereferencerTest do
     assert guid_with_name == Enum.at(dereference(response, definition), 1)
   end
 
-  # test "dereference/2 pulls definitions recursively" do
-  #   guid_with_name = %{ "name" => "guid", "type" => ["string"]}
-  #   assert guid_with_name == Enum.at(dereference(response, definition), 2)
-  # end
+  test "dereference/2 pulls patient with recursive definition of guid" do
+    patient = %{"name" => "patient", "guid" => %{"type" => ["string"]} }
+    assert patient == Enum.at(dereference(response, definition), 2)
+  end
+
+  test "dereference/2 pulls links with deep recursive definitions" do
+    patient = %{
+      "name" => "link",
+      "title" => "Create a new patient.",
+      "schema" => %{
+        "properties" => %{
+          "guid" => %{"type" => ["string"]}
+        },
+        "type" => ["object"]
+      }
+    }
+    assert patient == Enum.at(dereference(%{"link" => link}, definition), 0)
+  end
 
   def first_name do
     %{ "name" => "first_name", "type" => ["pirate"], "format" => nil }
@@ -26,8 +40,24 @@ defmodule DereferencerTest do
   end
 
   def response do
-    %{"guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"},
-      "first_name" => first_name
+    %{
+      "guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"},
+      "first_name" => first_name,
+      "patient" => %{"guid" => %{ "$ref" => "#/definitions/pirate/definitions/guid"} }
+    }
+  end
+
+  def link do
+    %{
+      "title" => "Create a new patient.",
+      "schema" => %{
+        "properties" => %{
+          "guid" => %{
+            "$ref" => "#/definitions/patient/definitions/guid"
+          }
+        },
+        "type" => [ "object" ]
+      }
     }
   end
 
