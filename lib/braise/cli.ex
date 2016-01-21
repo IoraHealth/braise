@@ -82,9 +82,10 @@ defmodule Braise.CLI do
   end
 
   def output_filename_for(base_dir, type, version, name) do
+    name_with_hyphens = String.replace(name, "_", "-")
     dir = Enum.join([base_dir, type, version], "/")
     File.mkdir_p(dir)
-    Enum.join([dir, "/", name, ".js"], "")
+    Enum.join([dir, "/", name_with_hyphens, ".js"], "")
   end
 
 end
