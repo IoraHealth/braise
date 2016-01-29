@@ -1,6 +1,5 @@
 defmodule ModelTest do
   use ExUnit.Case
-
   import Braise.Model, only: [parse_from_resource: 1]
 
   test "parse_from_resource/1 pulls the name from the response" do
@@ -29,10 +28,10 @@ defmodule ModelTest do
   end
 
   def first_name_attribute do
-    %Braise.Attribute{name: "first_name", type: "pirate", format: nil}
+    %Braise.Attribute{name: "first_name", type: ["pirate"], format: nil}
   end
 
   def guid_attribute do
-    %Braise.Attribute{name: "guid", type: "string", format: nil}
+    %Braise.Attribute{name: "guid", type: ["string"], format: nil}
   end
 end

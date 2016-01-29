@@ -2,9 +2,9 @@
 import DS from 'ember-data';
 
 export default Emergency_contact = DS.Model.extend({
-  email: DS.attr(),
-  first_name: DS.attr(),
-  last_name: DS.attr(),
-  phone: DS.attr(),
-  relationship: DS.attr()
+  email: DS.attr("string"),
+  first_name: DS.attr("string"),
+  last_name: DS.attr("string"),
+  phone: DS.attr("string"),
+  relationship: DS.attr("string")
 });

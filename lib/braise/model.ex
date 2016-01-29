@@ -38,8 +38,6 @@ defmodule Braise.Model do
   end
 
   defp map_attribute(key, definition) do
-    type = List.to_string(definition["type"])
-    type = List.to_string(definition["type"])
-    %Braise.Attribute{name: key, type: type, format: definition["format"]}
+    %Braise.Attribute{name: key, type: definition["type"], format: definition["format"]}
   end
 end
