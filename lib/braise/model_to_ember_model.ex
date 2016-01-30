@@ -3,7 +3,7 @@ defmodule Braise.ModelToEmberModel do
     %{name: model.name, attributes: convert_attributes(model.attributes)}
   end
 
-  def convert_attributes(model_attributes, converted_attributes \\ []) 
+  def convert_attributes(model_attributes, converted_attributes \\ [])
   def convert_attributes([], converted_attributes), do: converted_attributes
 
   def convert_attributes([head | tail], converted_attributes) do

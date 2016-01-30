@@ -30,11 +30,12 @@ defmodule SchemaTest do
   end
 
   test "resource/1 sets the response to definition reference names" do
-    assert resource.response == definition_properties
-  end
-
-  test "resource/1 sets the definitions to the meat of the definition section" do
-    assert resource.definition == definition_meat
+    assert resource.response == [
+      %{"dob" => definition_meat["dob"]},
+      %{"email" => definition_meat["email"]},
+      %{"guid" => definition_meat["guid"]},
+      %{"title" => definition_properties["title"]}
+    ]
   end
 
   def resources, do: Braise.Schema.resources(schema)
@@ -46,7 +47,7 @@ defmodule SchemaTest do
   end
 
   def definitions do
-    %{"patient" => 
+    %{"patient" =>
       %{"definitions" => definition_meat,
         "properties" => definition_properties
        }
@@ -68,7 +69,7 @@ defmodule SchemaTest do
     %{"dob" => %{"$ref" => "#/definitions/patient/definitions/dob"},
       "email" => %{"$ref" => "#/definitions/patient/definitions/email"},
       "guid" => %{"$ref" => "#/definitions/patient/definitions/guid"},
-      "title" => "Patient Resource", "type" => ["object"]
+      "title" => %{"description" => "Patient Resource", "type" => ["object"]}
      }
   end
 
