@@ -3,13 +3,13 @@ import DS from 'ember-data';
 import Ember from 'ember';
 
 export default DS.RESTAdapter.extend({
-  host: "https://production.icisapp.com",
-  namespace: "api/v3",
+  host: "https://api.icisapp.com",
+  namespace: "v20150918",
   token: Ember.computed.alias('accessTokenWrapper.token'),
   
   pathForType: function(type) {
-    var decamelized = Ember.String.decamelize(type);
-    return Ember.String.pluralize(decamelized);
+    var underscorized = Ember.String.underscore(type);
+    return Ember.String.pluralize(underscorized);
   },
 
   headers: function() {

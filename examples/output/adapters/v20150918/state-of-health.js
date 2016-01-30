@@ -8,8 +8,8 @@ export default DS.RESTAdapter.extend({
   token: Ember.computed.alias('accessTokenWrapper.token'),
   
   pathForType: function(type) {
-    var decamelized = Ember.String.decamelize(type);
-    return Ember.String.pluralize(decamelized);
+    var underscorized = Ember.String.underscore(type);
+    return Ember.String.pluralize(underscorized);
   },
 
   headers: function() {
