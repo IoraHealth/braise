@@ -4,15 +4,15 @@ defmodule DereferencerTest do
   import Braise.Dereferencer, only: [dereference: 2]
 
   test "dereference/2 pulls the inline first_name" do
-    assert %{"first_name" => first_name} == Enum.at(dereference(response, definition), 0)
+    assert first_name == dereference(response, schema)["first_name"]
   end
 
   test "dereference/2 pulls the guid from the definitions" do
-    assert %{"guid" => guid} == Enum.at(dereference(response, definition), 1)
+    assert guid == dereference(response, schema)["guid"]
   end
 
   def first_name do
-    %{"type" => ["pirate"], "format" => nil }
+    %{ "name" => "first_name", "type" => ["pirate"], "format" => nil }
   end
 
   def guid do
@@ -20,13 +20,17 @@ defmodule DereferencerTest do
   end
 
   def response do
-    %{"guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"},
+    %{
+      "guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"},
       "first_name" => first_name
     }
   end
 
-  def definition do
-    %{"guid" => guid}
+  def schema do
+    %{"definitions" =>
+      %{"pirate" =>
+        %{"definitions" =>
+          %{"guid" => guid}}}}
   end
 
   def attributes do

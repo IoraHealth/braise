@@ -1,5 +1,5 @@
 defmodule Braise.Model do
-  defstruct [:name, :attributes]
+  defstruct [:name, :attributes, :actions]
   @moduledoc"""
   Representation of a RESTful resource with a name plus a collection of attributes.
   """
@@ -14,13 +14,14 @@ defmodule Braise.Model do
       %Braise.Model{name: "pirate", attributes: [%Braise.Attribute{name: "name", type: null, format: null}]}
   """
   def parse_from_resource(resource = %Braise.Resource{}) do
-    attributes = resource.response
-    |> Enum.map(&Enum.to_list/1)
-    |> Enum.map(&map_attribute/1)
-    %Braise.Model{name: resource.name, attributes: attributes}
+    attributes = Enum.map(resource.response, &map_attribute/1)
+    actions = %{
+      unsupported: Braise.LinkAction.unsupported_restful_actions(resource.links),
+      non_restful: Braise.LinkAction.non_restful_actions(resource.links)}
+    %Braise.Model{name: resource.name, attributes: attributes, actions: actions, actions: actions}
   end
 
-  defp map_attribute([{name, element}]) do
+  defp map_attribute({name, element}) do
     %Braise.Attribute{name: name, type: element["type"], format: element["format"]}
   end
 end

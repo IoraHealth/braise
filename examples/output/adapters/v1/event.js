@@ -11,5 +11,11 @@ export default DS.RESTAdapter.extend({
     return {
       'AUTHORIZATION': 'Bearer ' + this.get('token')
     };
-  }.property('token')
+  }.property('token'),
+
+  cancel: function(modelName, id, snapshot) {
+    var url = this.buildURL(modelName, id) + '/cancel';
+    return this.ajax(url, 'PUT', { data: snapshot });
+  }
+
 });

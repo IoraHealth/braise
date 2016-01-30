@@ -5,5 +5,24 @@ export default DS.Model.extend({
   patient_guid: DS.attr("string"),
   verified_at: DS.attr("string"),
   verified_by_name: DS.attr("string"),
-  verified_by_uid: DS.attr("string")
+  verified_by_uid: DS.attr("string"),
+
+  show: function() {
+    throw new Error("'show' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  delete: function() {
+    throw new Error("'delete' is not supported by the api");
+  }
+,
+
+
 });
