@@ -6,5 +6,24 @@ export default DS.Model.extend({
   first_name: DS.attr("string"),
   last_name: DS.attr("string"),
   phone: DS.attr("string"),
-  relationship: DS.attr("string")
+  relationship: DS.attr("string"),
+
+  show: function() {
+    throw new Error("'show' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  delete: function() {
+    throw new Error("'delete' is not supported by the api");
+  }
+,
+
+
 });

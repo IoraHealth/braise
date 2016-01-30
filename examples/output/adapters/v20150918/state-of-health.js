@@ -6,7 +6,6 @@ export default DS.RESTAdapter.extend({
   host: "https://api.icisapp.com",
   namespace: "v20150918",
   token: Ember.computed.alias('accessTokenWrapper.token'),
-  
   pathForType: function(type) {
     var underscorized = Ember.String.underscore(type);
     return Ember.String.pluralize(underscorized);
@@ -16,5 +15,7 @@ export default DS.RESTAdapter.extend({
     return {
       'AUTHORIZATION': 'Bearer ' + this.get('token')
     };
-  }.property('token')
+  }.property('token'),
+
+  
 });
