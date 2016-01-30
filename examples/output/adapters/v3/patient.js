@@ -11,5 +11,11 @@ export default DS.RESTAdapter.extend({
     return {
       'AUTHORIZATION': 'Bearer ' + this.get('token')
     };
-  }.property('token')
+  }.property('token'),
+
+  autocomplete: function(modelName, id, snapshot) {
+    var url = this.buildURL(modelName, id) + '/autocomplete';
+    return this.ajax(url, 'GET', { data: snapshot });
+  }
+
 });

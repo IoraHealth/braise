@@ -11,16 +11,18 @@ defmodule ModelTest do
   end
 
   def response do
-    [%{"guid" => %{ "type" => ["string"]}},
-     %{"first_name" => %{ "type" => ["pirate"], "format" => nil }}]
+    %{
+      "guid" => %{ "type" => ["string"]},
+      "first_name" => %{ "type" => ["pirate"], "format" => nil }
+    }
   end
 
   def resource do
-    %Braise.Resource{name: "pirate", response: response}
+    %Braise.Resource{name: "pirate", response: response, links: []}
   end
 
   def attributes do
-    [guid_attribute, first_name_attribute]
+    [first_name_attribute, guid_attribute]
   end
 
   def first_name_attribute do

@@ -5,7 +5,11 @@ defmodule Braise.EmberModelTemplate do
     import DS from 'ember-data';
 
     export default DS.Model.extend({
-      #{attributes(model.attributes)}
+      #{attributes(model.attributes)},
+
+    #{unsupported_actions(model)},
+
+    #{custom_actions(model)}
     });
     """
   end
@@ -22,4 +26,44 @@ defmodule Braise.EmberModelTemplate do
 
   def attribute(%{type: nil, name: name}), do: "#{name}: DS.attr()"
   def attribute(%{type: type, name: name}), do: "#{name}: DS.attr(\"#{type}\")"
+
+  defp custom_actions(nil) do
+    ""
+  end
+
+  defp custom_actions(model) do
+    Enum.map(model.actions.non_restful, &non_restful_javascript/1)
+    |> Enum.join(",\n")
+  end
+
+  defp unsupported_actions(model) do
+    Enum.map(model.actions.unsupported, &unsupported_javascript/1)
+    |> Enum.join(",\n")
+  end
+
+  defp unsupported_javascript(link_action) do
+    action_name = link_action.name
+    """
+      #{action_name}: function() {
+        throw new Error("'#{action_name}' is not supported by the api");
+      }
+    """
+  end
+
+  defp non_restful_javascript(link_action) do
+    action_name = link_action.name
+    """
+      #{action_name}: function() {
+        var _this = this;
+        var modelName = this.constructor.modelName;
+        var adapter = this.store.adapterFor(modelName);
+        return adapter.#{action_name}(modelName, this.get('id'), arguments).then(function(response) {
+          var serializer = _this.store.serializerFor(modelName);
+          var payloadKey = serializer.payloadKeyFromModelName(modelName);
+          var payload = response[payloadKey];
+          _this.setProperties(payload);
+        });
+      }
+    """
+  end
 end

@@ -9,5 +9,28 @@ export default DS.Model.extend({
   last_name: DS.attr("string"),
   patient_app_shared: DS.attr("boolean"),
   practice: DS.attr(),
-  preferred_location: DS.attr()
+  preferred_location: DS.attr(),
+
+  index: function() {
+    throw new Error("'index' is not supported by the api");
+  }
+,
+  create: function() {
+    throw new Error("'create' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  delete: function() {
+    throw new Error("'delete' is not supported by the api");
+  }
+,
+
+
 });
