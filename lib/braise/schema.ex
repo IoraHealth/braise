@@ -8,10 +8,10 @@ defmodule Braise.Schema do
 
   @doc"""
   Returns a collection of resources that we can generate adapter
-  and model files from. The resource is the combination of a 
+  and model files from. The resource is the combination of a
   name, uri, definition, and response.
 
-  The response represents what should be returned by the 
+  The response represents what should be returned by the
   specific resource, the definition contains specifically what
   each attribute in the response means. We have to later dereference
   the response with the provided definition.
@@ -38,11 +38,13 @@ defmodule Braise.Schema do
 
   defp resources([], _, collection), do: collection
   defp resources([{key, _} | tail], schema, collection) do
-    response = response_lookup(schema, key)
     definition = definition_lookup(schema, key)
+    response = response_lookup(schema, key)
+    |> Braise.Dereferencer.dereference(definition)
+
     {:ok, uri} = url(schema.links)
 
-    new_resource = %Braise.Resource{name: key, url: uri, definition: definition, response: response}
+    new_resource = %Braise.Resource{name: key, url: uri, response: response}
     resources(tail, schema, collection ++[new_resource])
   end
 
