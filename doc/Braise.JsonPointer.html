@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.3">
-    <title>Braise.Schema – braise v0.1.0</title>
+    <title>Braise.JsonPointer – braise v0.1.0</title>
     <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -60,17 +60,11 @@
 
       <h1>
         <small class="visible-xs">braise v0.1.0</small>
-        Braise.Schema
+        Braise.JsonPointer
         
         
       </h1>
 
-      
-        <section id="moduledoc" class="docstring">
-          <p>The structured representation of the parse JSON file for
-JSON Schema.</p>
-
-        </section>
       
 
       
@@ -90,23 +84,8 @@ JSON Schema.</p>
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#resources/2">resources(schema, collection \\ [])</a>
+    <a href="#lookup/2">lookup(pointer, definitions)</a>
   </div>
-  
-    <div class="summary-synopsis"><p>Returns a collection of resources that we can generate adapter
-and model files from. The resource is the combination of a
-name, uri, definition, and response</p>
-</div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#url/1">url(arg1)</a>
-  </div>
-  
-    <div class="summary-synopsis"><p>Returns a parsed URI from the JSON schema segment that contains
-the root of the API we are trying to build Ember files out of</p>
-</div>
   
 </div>
 
@@ -130,45 +109,17 @@ the root of the API we are trying to build Ember files out of</p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="resources/2">
+          <div class="detail" id="lookup/2">
   <div class="detail-header">
-    <a href="#resources/2" class="detail-link" title="Link to this function">
+    <a href="#lookup/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">resources(schema, collection \\ [])</span>
+    <span class="signature">lookup(pointer, definitions)</span>
       
   </div>
   
   <section class="docstring">
-    <p>Returns a collection of resources that we can generate adapter
-and model files from. The resource is the combination of a
-name, uri, definition, and response.</p>
-<p>The response represents what should be returned by the
-specific resource, the definition contains specifically what
-each attribute in the response means. We have to later dereference
-the response with the provided definition.</p>
-
-  </section>
-</div>
-<div class="detail" id="url/1">
-  <div class="detail-header">
-    <a href="#url/1" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">url(arg1)</span>
-      
-  </div>
-  
-  <section class="docstring">
-    <p>Returns a parsed URI from the JSON schema segment that contains
-the root of the API we are trying to build Ember files out of.</p>
-<h2>Examples</h2>
-<pre><code class="elixir">iex &gt; Braise.Schema.url([%{&quot;href&quot; =&gt; &quot;http://bizdev.lol&quot;}])
-{:ok, %URI{authority: &quot;bizdev.lol&quot;, fragment: nil, host: &quot;bizdev.lol&quot;, path: nil, port: 80, query: nil, scheme: &quot;http&quot;, userinfo: nil}
-
-iex &gt; Braise.Schema.url(&quot;imma invalid schema&quot;)
-{:error, &quot;Invalid links portion of JSON Schema&quot;}</code></pre>
-
+    
   </section>
 </div>
 

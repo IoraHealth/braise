@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.3">
-    <title>Braise.ResourceDefinitionTuples – braise v0.1.0</title>
+    <title>Braise.Dereferencer – braise v0.1.0</title>
     <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -60,18 +60,11 @@
 
       <h1>
         <small class="visible-xs">braise v0.1.0</small>
-        Braise.ResourceDefinitionTuples
+        Braise.Dereferencer
         
         
       </h1>
 
-      
-        <section id="moduledoc" class="docstring">
-          <p>Provides a mapping between the response attributes of
-a RESTful resource and the name used to define said
-attributes in a different section of the Schema.</p>
-
-        </section>
       
 
       
@@ -91,12 +84,11 @@ attributes in a different section of the Schema.</p>
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#map/1">map(references)</a>
+    <a href="#dereference/2">dereference(resources, definitions)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Returns a tuple of response attribute and the name
-to lookup for its type, format, and other meta data
-within the definition section of the resource</p>
+    <div class="summary-synopsis"><p>Given a map of resources and definitions apply the definitions and to dereference any “$ref”s
+Return the dereferenced map of resources</p>
 </div>
   
 </div>
@@ -121,19 +113,23 @@ within the definition section of the resource</p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="map/1">
+          <div class="detail" id="dereference/2">
   <div class="detail-header">
-    <a href="#map/1" class="detail-link" title="Link to this function">
+    <a href="#dereference/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">map(references)</span>
+    <span class="signature">dereference(resources, definitions)</span>
       
   </div>
   
   <section class="docstring">
-    <p>Returns a tuple of response attribute and the name
-to lookup for its type, format, and other meta data
-within the definition section of the resource.</p>
+    <p>Given a map of resources and definitions apply the definitions and to dereference any “$ref”s
+Return the dereferenced map of resources</p>
+<h2>Examples</h2>
+<pre><code class="elixir">iex &gt; resources = %{&quot;first_name&quot; =&gt; %{&quot;format&quot; =&gt; nil, &quot;name&quot; =&gt; &quot;first_name&quot;, &quot;type&quot; =&gt; [&quot;pirate&quot;]},&quot;guid&quot; =&gt; %{&quot;$ref&quot; =&gt; &quot;/definitions/pirate/definitions/guid&quot;}}
+iex &gt; definitions = %{&quot;definitions&quot; =&gt; %{&quot;pirate&quot; =&gt; %{&quot;definitions&quot; =&gt; %{&quot;guid&quot; =&gt; %{&quot;type&quot; =&gt; [&quot;string&quot;]}}}}}
+iex &gt; Braise.Dereferencer.dereference(resources, definitions)
+%{&quot;first_name&quot; =&gt; %{&quot;format&quot; =&gt; nil, &quot;name&quot; =&gt; &quot;first_name&quot;, &quot;type&quot; =&gt; [&quot;pirate&quot;]}, &quot;guid&quot; =&gt; %{&quot;type&quot; =&gt; [&quot;string&quot;]}}</code></pre>
 
   </section>
 </div>
