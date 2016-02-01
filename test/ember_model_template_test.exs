@@ -28,10 +28,36 @@ defmodule EmberModelTemplateTest do
     import DS from 'ember-data';
 
     export default DS.Model.extend({
-      first_name: DS.attr("string")
+      first_name: DS.attr("string"),
+
+      delete: function() {
+        throw new Error("'delete' is not supported by the api");
+      }
+  ,
+
+      cancel: function() {
+        var _this = this;
+        var modelName = this.constructor.modelName;
+        var adapter = this.store.adapterFor(modelName);
+        return adapter.cancel(modelName, this.get('id'), arguments).then(function(response) {
+          var serializer = _this.store.serializerFor(modelName);
+          var payloadKey = serializer.payloadKeyFromModelName(modelName);
+          var payload = response[payloadKey];
+          _this.setProperties(payload);
+        });
+      }
+
     });
     """
-    model = %{ :attributes => [%{:type => "string", :name => "first_name" }]}
+
+    model = %{
+      :name => "person",
+      :attributes => [%{:type => "string", :name => "first_name" }],
+      :actions => %{
+        :unsupported => [ %Braise.LinkAction{name: "delete"} ],
+        :non_restful => [ %Braise.LinkAction{name: "cancel"} ]
+      }
+    }
     actual_template = generate(model)
 
     assert actual_template == expected_template

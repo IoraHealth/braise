@@ -11,5 +11,7 @@ export default DS.RESTAdapter.extend({
     return {
       'AUTHORIZATION': 'Bearer ' + this.get('token')
     };
-  }.property('token')
+  }.property('token'),
+
+  
 });

@@ -4,5 +4,28 @@ import DS from 'ember-data';
 export default DS.Model.extend({
   locations: DS.attr(),
   name: DS.attr("string"),
-  uid: DS.attr("string")
+  uid: DS.attr("string"),
+
+  index: function() {
+    throw new Error("'index' is not supported by the api");
+  }
+,
+  create: function() {
+    throw new Error("'create' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  update: function() {
+    throw new Error("'update' is not supported by the api");
+  }
+,
+  delete: function() {
+    throw new Error("'delete' is not supported by the api");
+  }
+,
+
+
 });

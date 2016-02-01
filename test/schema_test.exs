@@ -30,11 +30,18 @@ defmodule SchemaTest do
   end
 
   test "resource/1 sets the response to definition reference names" do
-    assert resource.response == definition_properties
+    assert resource.response == %{
+      "dob" => definition_meat["dob"],
+      "email" => definition_meat["email"],
+      "guid" => definition_meat["guid"],
+      "title" => definition_properties["title"]
+    }
   end
 
-  test "resource/1 sets the definitions to the meat of the definition section" do
-    assert resource.definition == definition_meat
+  test "resource/1 sets the links to definition reference names" do
+    assert resource.links == [
+      %Braise.LinkAction{method: "GET", name: :index, on_member: false, restful: true}
+    ]
   end
 
   def resources, do: Braise.Schema.resources(schema)
@@ -42,13 +49,14 @@ defmodule SchemaTest do
   def resource, do: List.first(resources)
 
   def schema do
-    %Braise.Schema{definitions: definitions, properties: properties ,links: [%{"href" => "http://bizdev.lol"}]}
+    %Braise.Schema{definitions: definitions, properties: properties, links: links}
   end
 
   def definitions do
-    %{"patient" => 
+    %{"patient" =>
       %{"definitions" => definition_meat,
-        "properties" => definition_properties
+        "properties" => definition_properties,
+        "links" => links
        }
      }
   end
@@ -60,19 +68,47 @@ defmodule SchemaTest do
                    "type" => ["string"]},
       "guid" => %{"description" => "unique identifier of patient", "example" => "adsgjh2352462cah23jh23asd4avb", "format" => "uuid",
                   "type" => ["string"]},
-      "identity" => %{"$ref" => "#/definitions/patient/definitions/guid"}
+      "identity" => %{"$ref" => "#/definitions/patient/definitions/guid"},
+      "index_response" => %{
+        "oneOf": [
+          %{
+            "properties": %{
+              "patients": %{
+                "type": [ "array" ],
+                "items": %{ "$ref": "/schemata/patient" }
+              }
+            },
+            "required": [ "patients" ]
+          },
+          %{ "$ref": "/schemata/patients#/definitions/error_response" }
+        ]
+      }
      }
+  end
+
+  def links do
+    [
+      %{
+        "description" => "List existing patients.",
+        "href" => "/patients",
+        "method" => "GET",
+        "rel" => "instances",
+        "title" => "List",
+        "target_schema" => %{ "$ref" => "#/definitions/patients/definitions/index_response" }
+      }
+    ]
   end
 
   def definition_properties do
     %{"dob" => %{"$ref" => "#/definitions/patient/definitions/dob"},
       "email" => %{"$ref" => "#/definitions/patient/definitions/email"},
       "guid" => %{"$ref" => "#/definitions/patient/definitions/guid"},
-      "title" => "Patient Resource", "type" => ["object"]
+      "title" => %{"description" => "Patient Resource", "type" => ["object"]}
      }
   end
 
   def  properties do
     %{"patient" => %{"$ref" => "#/definitions/patient"}}
   end
+
 end
