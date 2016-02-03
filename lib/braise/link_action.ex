@@ -26,7 +26,6 @@ defmodule Braise.LinkAction do
       %Braise.LinkAction{restful: true, name: :show, method: "GET", on_member: true},
       %Braise.LinkAction{restful: true, name: :create, method: "POST", on_member: false},
       %Braise.LinkAction{restful: true, name: :update, method: "PUT", on_member: true},
-      %Braise.LinkAction{restful: true, name: :update, method: "PATCH", on_member: true},
       %Braise.LinkAction{restful: true, name: :delete, method: "DELETE", on_member: true}
     ]
 
@@ -50,7 +49,7 @@ defmodule Braise.LinkAction do
     %Braise.LinkAction{restful: true, name: :update, method: "PUT", on_member: true}
   end
   defp restful_action("PATCH", _) do
-    %Braise.LinkAction{restful: true, name: :update, method: "PATCH", on_member: true}
+    %Braise.LinkAction{restful: true, name: :update, method: "PUT", on_member: true}
   end
   defp restful_action("DELETE", _) do
     %Braise.LinkAction{restful: true, name: :delete, method: "DELETE", on_member: true}

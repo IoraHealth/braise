@@ -23,9 +23,9 @@ defmodule LinkActionTest do
     assert name("patient", link) == %Braise.LinkAction{method: "PUT", name: :update, on_member: true, restful: true}
   end
 
-  test "restful update action (patch)" do
+  test "restful update action (patch - we group with PUT update action to avoid dups)" do
     link = %{"method"=>"PATCH", "href"=>"http://blah.com/api/v1/patients/123"}
-    assert name("patient", link) == %Braise.LinkAction{method: "PATCH", name: :update, on_member: true, restful: true}
+    assert name("patient", link) == %Braise.LinkAction{method: "PUT", name: :update, on_member: true, restful: true}
   end
 
   test "restful delete action" do
@@ -47,14 +47,13 @@ defmodule LinkActionTest do
 
   test "finding the unsupported-restful actions" do
     index = %Braise.LinkAction{method: "GET", name: :index, on_member: false, restful: true}
+    update = %Braise.LinkAction{method: "PUT", name: :update, on_member: true, restful: true}
     cancel = %Braise.LinkAction{method: "PUT", name: "cancel", on_member: true, restful: false}
-    actions = [index, cancel]
+    actions = [index, update, cancel]
 
     expected = [
       %Braise.LinkAction{method: "GET", name: :show, on_member: true, restful: true},
       %Braise.LinkAction{method: "POST", name: :create, on_member: false, restful: true},
-      %Braise.LinkAction{method: "PUT", name: :update, on_member: true, restful: true},
-      %Braise.LinkAction{method: "PATCH", name: :update, on_member: true, restful: true},
       %Braise.LinkAction{method: "DELETE", name: :delete, on_member: true, restful: true}
     ]
     assert unsupported_restful_actions(actions) == expected
