@@ -40,6 +40,6 @@ defmodule Braise.Mixfile do
   defp package do
     [maintainers: ["Patrick Robertson", "Alex Rothenberg"],
      licenses: ["MIT"],
-     links: %{github: "https://github.com/patricksrobertson/secure_random.ex"}]
+     links: %{github: "https://github.com/IoraHealth/braise"}]
   end
 end
