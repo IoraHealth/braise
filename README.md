@@ -4,6 +4,8 @@ Braise [![[travis]](https://travis-ci.org/IoraHealth/braise.png)](https://travis
 Braise cooks those boring old JSON Schema definitions
 down into rock-hard-awesome Ember CLI files.
 
+Releases published on hex.pm at https://hex.pm/packages/braise
+
 INSTALLATION
 ------------
 
