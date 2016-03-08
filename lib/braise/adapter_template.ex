@@ -37,6 +37,8 @@ defmodule Braise.AdapterTemplate do
         };
       }.property('token'),
 
+      #{error_mapping(resource)}
+
       #{custom_actions(resource)}
     });
     """
@@ -70,6 +72,42 @@ defmodule Braise.AdapterTemplate do
     else
       ""
     end
+  end
+
+  defp error_mapping(resource) do
+    """
+    handleResponse: function(status, headers, payload) {
+        if (status === 422) { // HTTP 422 Unprocessible Entity
+          // Map ActiveModel-style errors to JSONAPI-style
+          if (!Ember.isArray(payload.errors) && typeof payload.errors === "object") {
+            let errors = [];
+
+            Object.keys(payload.errors).forEach((key) => {
+              let messages = payload.errors[key] || [];
+              for (let message of messages) {
+                let title = 'Invalid Attribute';
+                let pointer = `/data/attributes/${key}`;
+                if (key === 'base') {
+                  title = 'Invalid #{resource.name}';
+                  pointer = `/data`;
+                }
+                errors.push({
+                  title: title,
+                  detail: message,
+                  source: {
+                    pointer: pointer
+                  }
+                });
+              }
+            });
+
+            return new DS.InvalidError(errors);
+          }
+        }
+
+        return this._super(...arguments);
+      },
+    """
   end
 
   defp custom_actions(resource) do
