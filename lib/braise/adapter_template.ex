@@ -31,12 +31,7 @@ defmodule Braise.AdapterTemplate do
       namespace: "#{path_without_leading_slash(resource)}",
       token: Ember.computed.alias('accessTokenWrapper.token'),
       #{path_for_type(resource.name)}
-      headers: function() {
-        return {
-          'AUTHORIZATION': 'Bearer ' + this.get('token')
-        };
-      }.property('token'),
-
+      #{authorization}
       #{custom_actions(resource)}
     });
     """
@@ -70,6 +65,22 @@ defmodule Braise.AdapterTemplate do
     else
       ""
     end
+  end
+
+  defp authorization do
+    """
+    ajaxOptions: function(url, type, options) {
+        options = options || {};
+        if (type === "GET") {
+          options.data = options.data || {};
+          options.data["access_token"] = this.get('token');
+        } else {
+          options.headers = options.headers || {};
+          options.headers["Authorization"] = 'Bearer ' + this.get('token');
+        }
+        return this._super(url, type, options);
+      },
+    """
   end
 
   defp custom_actions(resource) do
