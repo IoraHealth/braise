@@ -11,11 +11,17 @@ export default DS.RESTAdapter.extend({
     return Ember.String.pluralize(underscorized);
   },
 
-  headers: function() {
-    return {
-      'AUTHORIZATION': 'Bearer ' + this.get('token')
-    };
-  }.property('token'),
+  ajaxOptions: function(url, type, options) {
+    options = options || {};
+    if (type === "GET") {
+      options.data = options.data || {};
+      options.data["access_token"] = this.get('token');
+    } else {
+      options.headers = options.headers || {};
+      options.headers["Authorization"] = 'Bearer ' + this.get('token');
+    }
+    return this._super(url, type, options);
+  },
 
   cancel: function(modelName, id, snapshot) {
     var url = this.buildURL(modelName, id) + '/cancel';
