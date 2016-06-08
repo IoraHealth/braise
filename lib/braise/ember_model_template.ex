@@ -5,10 +5,9 @@ defmodule Braise.EmberModelTemplate do
     import DS from 'ember-data';
 
     export default DS.Model.extend({
-      #{attributes(model.attributes)},
+      #{attributes(model.attributes)}
 
-    #{unsupported_actions(model)},
-
+    #{unsupported_actions(model)}
     #{custom_actions(model)}
     });
     """
@@ -17,15 +16,15 @@ defmodule Braise.EmberModelTemplate do
   def attributes(attributes, template \\ [])
 
   def attributes([], template) do
-    Enum.join(template, ",\n  ")
+    Enum.join(template, "\n  ")
   end
 
   def attributes([head | tail], template) do
     attributes(tail, template ++ [attribute(head)])
   end
 
-  def attribute(%{type: nil, name: name}), do: "#{name}: DS.attr()"
-  def attribute(%{type: type, name: name}), do: "#{name}: DS.attr(\"#{type}\")"
+  def attribute(%{type: nil, name: name}), do: "#{name}: DS.attr(),"
+  def attribute(%{type: type, name: name}), do: "#{name}: DS.attr(\"#{type}\"),"
 
   defp custom_actions(nil) do
     ""
@@ -33,12 +32,12 @@ defmodule Braise.EmberModelTemplate do
 
   defp custom_actions(model) do
     Enum.map(model.actions.non_restful, &non_restful_javascript/1)
-    |> Enum.join(",\n")
+    |> Enum.join("")
   end
 
   defp unsupported_actions(model) do
     Enum.map(model.actions.unsupported, &unsupported_javascript/1)
-    |> Enum.join(",\n")
+    |> Enum.join("")
   end
 
   defp unsupported_javascript(link_action) do
@@ -46,7 +45,7 @@ defmodule Braise.EmberModelTemplate do
     """
       #{action_name}: function() {
         throw new Error("'#{action_name}' is not supported by the api");
-      }
+      },
     """
   end
 
@@ -63,7 +62,7 @@ defmodule Braise.EmberModelTemplate do
           var payload = response[payloadKey];
           _this.setProperties(payload);
         });
-      }
+      },
     """
   end
 end
