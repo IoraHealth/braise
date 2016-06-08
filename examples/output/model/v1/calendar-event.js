@@ -15,12 +15,10 @@ export default DS.Model.extend({
 
   show: function() {
     throw new Error("'show' is not supported by the api");
-  }
-,
+  },
   delete: function() {
     throw new Error("'delete' is not supported by the api");
-  }
-,
+  },
 
   cancel: function() {
     var _this = this;
@@ -32,6 +30,6 @@ export default DS.Model.extend({
       var payload = response[payloadKey];
       _this.setProperties(payload);
     });
-  }
+  },
 
 });

@@ -14,16 +14,13 @@ export default DS.Model.extend({
 
   create: function() {
     throw new Error("'create' is not supported by the api");
-  }
-,
+  },
   update: function() {
     throw new Error("'update' is not supported by the api");
-  }
-,
+  },
   delete: function() {
     throw new Error("'delete' is not supported by the api");
-  }
-,
+  },
 
 
 });
