@@ -39,13 +39,25 @@ defmodule CLITest do
   end
 
   test "path not following our version convention raises error" do
-    assert_raise File.Error, "could not read file \"bad/path/that/does/not/exist.json\": no such file or directory", fn ->
+    expected_message = if Elixir.Version.match?(System.version, ">= 1.3.0") do
+      "could not read file \"bad/path/that/does/not/exist.json\": no such file or directory"
+    else
+      "could not read file bad/path/that/does/not/exist.json: no such file or directory"
+    end
+
+    assert_raise File.Error, expected_message, fn ->
       read_file("bad/path/that/does/not/exist.json")
     end
   end
 
   test "path that doesn't match our versioning pattern raises an error" do
-    assert_raise File.Error, "could not find version from path \"path/withoiut/version/resource.json\": unknown POSIX error", fn ->
+    expected_message = if Elixir.Version.match?(System.version, ">= 1.3.0") do
+      "could not find version from path \"path/withoiut/version/resource.json\": unknown POSIX error"
+    else
+      "could not find version from path path/withoiut/version/resource.json: unknown POSIX error"
+    end
+
+    assert_raise File.Error, expected_message, fn ->
       version_from!("path/withoiut/version/resource.json")
     end
   end
