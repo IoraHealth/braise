@@ -34,14 +34,18 @@ defmodule CLITest do
     assert parse_options([]) == :help
   end
 
+  test "passing --version into parse_options returns :version" do
+    assert parse_options(["--version"]) == :version
+  end
+
   test "path not following our version convention raises error" do
-    assert_raise File.Error, "could not read file bad/path/that/does/not/exist.json: no such file or directory", fn ->
+    assert_raise File.Error, "could not read file \"bad/path/that/does/not/exist.json\": no such file or directory", fn ->
       read_file("bad/path/that/does/not/exist.json")
     end
   end
 
   test "path that doesn't match our versioning pattern raises an error" do
-    assert_raise File.Error, "could not find version from path path/withoiut/version/resource.json: unknown POSIX error", fn ->
+    assert_raise File.Error, "could not find version from path \"path/withoiut/version/resource.json\": unknown POSIX error", fn ->
       version_from!("path/withoiut/version/resource.json")
     end
   end
