@@ -1,9 +1,11 @@
 defmodule Braise.Mixfile do
+  Code.require_file "lib/braise.ex", __DIR__
+
   use Mix.Project
 
   def project do
     [app: :braise,
-     version: "0.3.4",
+     version: Braise.version,
      elixir: "~> 1.0",
      escript: escript_config,
      description: "A library that converts JSON Schema into ember models/adapters.",

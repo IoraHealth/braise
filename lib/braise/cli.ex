@@ -1,4 +1,5 @@
 defmodule Braise.CLI do
+  require Braise
 
   @moduledoc """
   Handles parsing the command line and dispatches to
@@ -12,15 +13,22 @@ defmodule Braise.CLI do
   end
 
   def parse_options(argv) do
-    parse = OptionParser.parse(argv, switches: [help: :boolean, file: :string, output: :string],
+    parse = OptionParser.parse(argv, switches: [help: :boolean, file: :string, output: :string, version: :boolean],
                                      aliases:  [h:    :help,    f:     :file,  o:      :output])
 
     case parse do
       { [help: true], _, _ } -> :help
+      { [version: true], _, _ } -> :version
       { [file: filename, output: output], _, _} -> { :file, filename, :output, output }
       { [file: true], _, _ } -> :missing_file
       { _, _, _} -> :help
     end
+  end
+
+  def process(:version) do
+    IO.puts """
+    Braise version #{Braise.version}
+    """
   end
 
   def process(:help) do
