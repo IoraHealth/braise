@@ -21,12 +21,15 @@ defmodule AdapterTemplateTest do
     import DS from 'ember-data';
     import Ember from 'ember';
 
-    export default DS.RESTAdapter.extend({
+    const { RESTAdapter } = DS;
+    const { computed, EmberString: String } = Ember;
+
+    export default RESTAdapter.extend({
       host: "http://production.icisapp.com",
       namespace: "api/v2",
-      token: Ember.computed.alias('accessTokenWrapper.token'),
+      token: computed.alias('accessTokenWrapper.token'),
       
-      ajaxOptions: function(url, type, options) {
+      ajaxOptions(url, type, options) {
         options = options || {};
         if (type === "GET") {
           options.data = options.data || {};
@@ -57,12 +60,15 @@ defmodule AdapterTemplateTest do
     import DS from 'ember-data';
     import Ember from 'ember';
 
-    export default DS.RESTAdapter.extend({
+    const { RESTAdapter } = DS;
+    const { computed, EmberString: String } = Ember;
+
+    export default RESTAdapter.extend({
       host: "http://production.icisapp.com",
       namespace: "api/v2",
-      token: Ember.computed.alias('accessTokenWrapper.token'),
+      token: computed.alias('accessTokenWrapper.token'),
       
-      ajaxOptions: function(url, type, options) {
+      ajaxOptions(url, type, options) {
         options = options || {};
         if (type === "GET") {
           options.data = options.data || {};
@@ -74,7 +80,7 @@ defmodule AdapterTemplateTest do
         return this._super(url, type, options);
       },
 
-      cancel: function(modelName, id, snapshot) {
+      cancel(modelName, id, snapshot) {
         var url = this.buildURL(modelName, id) + '/cancel';
         return this.ajax(url, 'PUT', { data: snapshot });
       }
@@ -94,9 +100,9 @@ defmodule AdapterTemplateTest do
 
   test "path_for_type chucks in the function when the resource name has underscores" do
     expected_template = """
-    pathForType: function(type) {
-        var underscorized = Ember.String.underscore(type);
-        return Ember.String.pluralize(underscorized);
+    pathForType(type) {
+        var underscorized = EmberString.underscore(type);
+        return EmberString.pluralize(underscorized);
       },
     """
 

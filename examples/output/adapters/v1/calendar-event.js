@@ -2,16 +2,19 @@
 import DS from 'ember-data';
 import Ember from 'ember';
 
-export default DS.RESTAdapter.extend({
+const { RESTAdapter } = DS;
+const { computed, EmberString: String } = Ember;
+
+export default RESTAdapter.extend({
   host: "https://production.icisapp.com",
   namespace: "api/v1",
-  token: Ember.computed.alias('accessTokenWrapper.token'),
-  pathForType: function(type) {
-    var underscorized = Ember.String.underscore(type);
-    return Ember.String.pluralize(underscorized);
+  token: computed.alias('accessTokenWrapper.token'),
+  pathForType(type) {
+    var underscorized = EmberString.underscore(type);
+    return EmberString.pluralize(underscorized);
   },
 
-  ajaxOptions: function(url, type, options) {
+  ajaxOptions(url, type, options) {
     options = options || {};
     if (type === "GET") {
       options.data = options.data || {};
@@ -23,7 +26,7 @@ export default DS.RESTAdapter.extend({
     return this._super(url, type, options);
   },
 
-  cancel: function(modelName, id, snapshot) {
+  cancel(modelName, id, snapshot) {
     var url = this.buildURL(modelName, id) + '/cancel';
     return this.ajax(url, 'PUT', { data: snapshot });
   }

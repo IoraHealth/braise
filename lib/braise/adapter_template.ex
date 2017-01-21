@@ -26,10 +26,13 @@ defmodule Braise.AdapterTemplate do
     import DS from 'ember-data';
     import Ember from 'ember';
 
-    export default DS.RESTAdapter.extend({
+    const { RESTAdapter } = DS;
+    const { computed, EmberString: String } = Ember;
+
+    export default RESTAdapter.extend({
       host: "#{resource.url.scheme}://#{resource.url.host}",
       namespace: "#{path_without_leading_slash(resource)}",
-      token: Ember.computed.alias('accessTokenWrapper.token'),
+      token: computed.alias('accessTokenWrapper.token'),
       #{path_for_type(resource.name)}
       #{authorization}
       #{custom_actions(resource)}
@@ -57,9 +60,9 @@ defmodule Braise.AdapterTemplate do
   def path_for_type(resource_name) do
     if String.match?(resource_name, ~r/_/) do
       """
-      pathForType: function(type) {
-          var underscorized = Ember.String.underscore(type);
-          return Ember.String.pluralize(underscorized);
+      pathForType(type) {
+          var underscorized = EmberString.underscore(type);
+          return EmberString.pluralize(underscorized);
         },
       """
     else
@@ -69,7 +72,7 @@ defmodule Braise.AdapterTemplate do
 
   defp authorization do
     """
-    ajaxOptions: function(url, type, options) {
+    ajaxOptions(url, type, options) {
         options = options || {};
         if (type === "GET") {
           options.data = options.data || {};
@@ -93,7 +96,7 @@ defmodule Braise.AdapterTemplate do
     action_name = link_action.name
     method = link_action.method
     """
-    #{action_name}: function(modelName, id, snapshot) {
+    #{action_name}(modelName, id, snapshot) {
         var url = this.buildURL(modelName, id) + '/#{action_name}';
         return this.ajax(url, '#{method}', { data: snapshot });
       }

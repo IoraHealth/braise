@@ -2,12 +2,15 @@
 import DS from 'ember-data';
 import Ember from 'ember';
 
-export default DS.RESTAdapter.extend({
+const { RESTAdapter } = DS;
+const { computed, EmberString: String } = Ember;
+
+export default RESTAdapter.extend({
   host: "https://api.icisapp.com",
   namespace: "v20150918",
-  token: Ember.computed.alias('accessTokenWrapper.token'),
+  token: computed.alias('accessTokenWrapper.token'),
   
-  ajaxOptions: function(url, type, options) {
+  ajaxOptions(url, type, options) {
     options = options || {};
     if (type === "GET") {
       options.data = options.data || {};
