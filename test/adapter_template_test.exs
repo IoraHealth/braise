@@ -81,7 +81,7 @@ defmodule AdapterTemplateTest do
       },
 
       cancel(modelName, id, snapshot) {
-        var url = this.buildURL(modelName, id) + '/cancel';
+        const url = this.buildURL(modelName, id) + '/cancel';
         return this.ajax(url, 'PUT', { data: snapshot });
       }
 
@@ -101,7 +101,7 @@ defmodule AdapterTemplateTest do
   test "path_for_type chucks in the function when the resource name has underscores" do
     expected_template = """
     pathForType(type) {
-        var underscorized = EmberString.underscore(type);
+        const underscorized = EmberString.underscore(type);
         return EmberString.pluralize(underscorized);
       },
     """

@@ -61,7 +61,7 @@ defmodule Braise.AdapterTemplate do
     if String.match?(resource_name, ~r/_/) do
       """
       pathForType(type) {
-          var underscorized = EmberString.underscore(type);
+          const underscorized = EmberString.underscore(type);
           return EmberString.pluralize(underscorized);
         },
       """
@@ -97,7 +97,7 @@ defmodule Braise.AdapterTemplate do
     method = link_action.method
     """
     #{action_name}(modelName, id, snapshot) {
-        var url = this.buildURL(modelName, id) + '/#{action_name}';
+        const url = this.buildURL(modelName, id) + '/#{action_name}';
         return this.ajax(url, '#{method}', { data: snapshot });
       }
     """

@@ -23,7 +23,7 @@ export default RESTAdapter.extend({
   },
 
   autocomplete(modelName, id, snapshot) {
-    var url = this.buildURL(modelName, id) + '/autocomplete';
+    const url = this.buildURL(modelName, id) + '/autocomplete';
     return this.ajax(url, 'GET', { data: snapshot });
   }
 

@@ -10,7 +10,7 @@ export default RESTAdapter.extend({
   namespace: "api/v1",
   token: computed.alias('accessTokenWrapper.token'),
   pathForType(type) {
-    var underscorized = EmberString.underscore(type);
+    const underscorized = EmberString.underscore(type);
     return EmberString.pluralize(underscorized);
   },
 
@@ -27,7 +27,7 @@ export default RESTAdapter.extend({
   },
 
   cancel(modelName, id, snapshot) {
-    var url = this.buildURL(modelName, id) + '/cancel';
+    const url = this.buildURL(modelName, id) + '/cancel';
     return this.ajax(url, 'PUT', { data: snapshot });
   }
 

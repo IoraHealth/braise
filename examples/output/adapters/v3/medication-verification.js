@@ -10,7 +10,7 @@ export default RESTAdapter.extend({
   namespace: "api/v3",
   token: computed.alias('accessTokenWrapper.token'),
   pathForType(type) {
-    var underscorized = EmberString.underscore(type);
+    const underscorized = EmberString.underscore(type);
     return EmberString.pluralize(underscorized);
   },
 

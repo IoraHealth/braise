@@ -23,7 +23,7 @@ export default RESTAdapter.extend({
   },
 
   cancel(modelName, id, snapshot) {
-    var url = this.buildURL(modelName, id) + '/cancel';
+    const url = this.buildURL(modelName, id) + '/cancel';
     return this.ajax(url, 'PUT', { data: snapshot });
   }
 
