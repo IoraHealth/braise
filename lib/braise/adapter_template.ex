@@ -27,7 +27,7 @@ defmodule Braise.AdapterTemplate do
     import Ember from 'ember';
 
     const { RESTAdapter } = DS;
-    const { computed, EmberString: String } = Ember;
+    const { computed, String: EmberString } = Ember;
 
     export default RESTAdapter.extend({
       host: "#{resource.url.scheme}://#{resource.url.host}",

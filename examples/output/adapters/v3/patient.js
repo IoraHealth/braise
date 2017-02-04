@@ -3,7 +3,7 @@ import DS from 'ember-data';
 import Ember from 'ember';
 
 const { RESTAdapter } = DS;
-const { computed, EmberString: String } = Ember;
+const { computed, String: EmberString } = Ember;
 
 export default RESTAdapter.extend({
   host: "https://production.icisapp.com",
