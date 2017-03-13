@@ -14,7 +14,8 @@ samples: build
 	./bin/braise --file examples/source/v3/medication_verification.json --output examples/output
 	./bin/braise --file examples/source/v20150918/sponsor_api.json --output examples/output
 	./bin/braise --file examples/source/v1/calendar_events.json --output examples/output
-test: build
+test: build samples
+	npm test
 	$(MIX_BIN) test --no-start
 spec: test
 toolchest: build

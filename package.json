@@ -9,7 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "eslint"
+    "test": "eslint examples/output/**/*.js"
   },
   "repository": {
     "type": "git",
