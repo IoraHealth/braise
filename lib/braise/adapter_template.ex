@@ -27,7 +27,7 @@ defmodule Braise.AdapterTemplate do
     import Ember from 'ember';
 
     const { RESTAdapter } = DS;
-    const { computed, String: EmberString } = Ember;  // eslint-disable-line no-unused-vars
+    const { computed, String: EmberString } = Ember; // eslint-disable-line no-unused-vars
 
     export default RESTAdapter.extend({
       host: "#{resource.url.scheme}://#{resource.url.host}",
