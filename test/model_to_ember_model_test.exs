@@ -5,13 +5,13 @@ defmodule ModelToEmberModelTest do
 
   test "strip_and_convert_attribute/1 converts booleans to ember typed booleans" do
     attribute = %{name: "is_admin", type: ["boolean"], format: nil}
-    assert %{name: "is_admin", type: "boolean"} == strip_and_convert_attribute(attribute)
+    assert %{name: "isAdmin", type: "boolean"} == strip_and_convert_attribute(attribute)
   end
 
   test "strip_and_convert_attribute/1 handles date-times appropriately" do
     attribute = %{name: "created_at", type: ["string"], format: "date-time"}
 
-    assert %{name: "created_at", type: "date"} == strip_and_convert_attribute(attribute)
+    assert %{name: "createdAt", type: "date"} == strip_and_convert_attribute(attribute)
   end
 
   test "strip_and_convert_attribute/1 handles number conversions as well" do
@@ -25,13 +25,13 @@ defmodule ModelToEmberModelTest do
   test "strip_and_convert_attribute/1 strings convert into ember typed strings" do
     string = %{name: "first_name", type: ["string"], format: "uuid"}
 
-    assert %{name: "first_name", type: "string"} == strip_and_convert_attribute(string)
+    assert %{name: "firstName", type: "string"} == strip_and_convert_attribute(string)
   end
 
   test "strip_and_convert_attribute/1 converts everything else into a nil type" do
     array = %{name: "practice_user_uids", type: ["array"], format: nil}
 
-    assert %{name: "practice_user_uids", type: nil} == strip_and_convert_attribute(array)
+    assert %{name: "practiceUserUids", type: nil} == strip_and_convert_attribute(array)
   end
 
   test "strip_and_convert_attribute/1 handles nullable typed attributes as well" do

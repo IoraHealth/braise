@@ -66,18 +66,18 @@ defmodule AcceptanceTest do
   end
 
   defp expected_adapter_for(resource) do
-    File.read(Path.join [System.cwd(), "examples/output/adapters", resource])
+    File.read(Path.join [System.cwd(), "examples/output/braise-adapters", resource])
   end
 
   defp expected_model_for(resource) do
-    File.read(Path.join [System.cwd(), "examples/output/model", resource])
+    File.read(Path.join [System.cwd(), "examples/output/braise-models", resource])
   end
 
   defp actual_adapter_for(resource) do
-    File.read(Path.join [test_output_dir, "adapters", resource])
+    File.read(Path.join [test_output_dir, "braise-adapters", resource])
   end
 
   defp actual_model_for(resource) do
-    File.read(Path.join [test_output_dir, "model", resource])
+    File.read(Path.join [test_output_dir, "braise-models", resource])
   end
 end

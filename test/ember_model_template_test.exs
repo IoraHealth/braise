@@ -4,11 +4,11 @@ defmodule EmberModelTemplateTest do
   import Braise.EmberModelTemplate, only: [attribute: 1, attributes: 1, generate: 1]
 
   test "attribute/1 on a nil type results in an empty Ember DS attr" do
-    assert "foo: attr()," == attribute(%{type: nil, name: "foo"})
+    assert "foo: attr()" == attribute(%{type: nil, name: "foo"})
   end
 
   test "attribute/1 on a specific type includes it in the DS attr" do
-    assert "foo: attr(\"string\")," == attribute(%{type: "string", name: "foo"})
+    assert "foo: attr(\"string\")" == attribute(%{type: "string", name: "foo"})
   end
 
   test "attributes/1 chucks together a merry list of attributes" do
@@ -17,7 +17,7 @@ defmodule EmberModelTemplateTest do
       %{ type: nil, name: "bar"},
       %{ type: nil, name: "baz"}
     ]
-    expected_output = "foo: attr(),\n  bar: attr(),\n  baz: attr(),"
+    expected_output = "foo: attr(),\n  bar: attr(),\n  baz: attr()"
 
     assert expected_output == attributes(attributes)
   end
@@ -30,30 +30,24 @@ defmodule EmberModelTemplateTest do
     const { Model, attr } = DS;
 
     export default Model.extend({
-      first_name: attr("string"),
+      firstName: attr("string"),
 
-      delete() {
-        throw new Error("'delete' is not supported by the api");
-      },
-
-      cancel() {
-        let _this = this;
-        const modelName = this.constructor.modelName;
+      async cancel() {
+        const { modelName } = this.constructor;
         const adapter = this.store.adapterFor(modelName);
-        return adapter.cancel(modelName, this.get('id'), arguments).then((response) => {
-          const serializer = _this.store.serializerFor(modelName);
-          const payloadKey = serializer.payloadKeyFromModelName(modelName);
-          const payload = response[payloadKey];
-          _this.setProperties(payload);
-        });
-      },
-
+        const response = await adapter.cancel(modelName, this.get('id'), arguments);
+        const serializer = this.store.serializerFor(modelName);
+        const payloadKey = serializer.payloadKeyFromModelName(modelName);
+        const payload = response[payloadKey];
+        this.setProperties(payload);
+        return this;
+      }
     });
     """
 
     model = %{
       :name => "person",
-      :attributes => [%{:type => "string", :name => "first_name" }],
+      :attributes => [%{:type => "string", :name => "firstName" }],
       :actions => %{
         :unsupported => [ %Braise.LinkAction{name: "delete"} ],
         :non_restful => [ %Braise.LinkAction{name: "cancel"} ]

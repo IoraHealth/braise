@@ -22,26 +22,34 @@ defmodule AdapterTemplateTest do
     import Ember from 'ember';
 
     const { RESTAdapter } = DS;
-    const { computed, String: EmberString } = Ember;
+    const { computed, String: EmberString } = Ember; // eslint-disable-line no-unused-vars
 
     export default RESTAdapter.extend({
       host: "http://production.icisapp.com",
       namespace: "api/v2",
       token: computed.alias('accessTokenWrapper.token'),
-      
-      ajaxOptions(url, type, options) {
-        options = options || {};
-        if (type === "GET") {
-          options.data = options.data || {};
-          options.data["access_token"] = this.get('token');
-        } else {
-          options.headers = options.headers || {};
-          options.headers["Authorization"] = 'Bearer ' + this.get('token');
+
+      // Prevent CORS preflight requests for GET requests
+      headersForRequest(params) {
+        const headers = this._super(params);
+        const method = this.methodForRequest(params);
+
+        if (method !== 'GET') {
+          headers['Authorization'] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
         }
-        return this._super(url, type, options);
+        return headers;
       },
 
-      
+      dataForRequest(params) {
+        const data = this._super(params);
+        const method = this.methodForRequest(params);
+
+        if (method === 'GET') {
+          data.access_token = data.access_token || this.get('token'); // eslint-disable-line camelcase
+        }
+
+        return data;
+      }
     });
     """
     {:ok, "patients", template } = generate_from_resource(resource)
@@ -61,30 +69,39 @@ defmodule AdapterTemplateTest do
     import Ember from 'ember';
 
     const { RESTAdapter } = DS;
-    const { computed, String: EmberString } = Ember;
+    const { computed, String: EmberString } = Ember; // eslint-disable-line no-unused-vars
 
     export default RESTAdapter.extend({
       host: "http://production.icisapp.com",
       namespace: "api/v2",
       token: computed.alias('accessTokenWrapper.token'),
-      
-      ajaxOptions(url, type, options) {
-        options = options || {};
-        if (type === "GET") {
-          options.data = options.data || {};
-          options.data["access_token"] = this.get('token');
-        } else {
-          options.headers = options.headers || {};
-          options.headers["Authorization"] = 'Bearer ' + this.get('token');
+
+      // Prevent CORS preflight requests for GET requests
+      headersForRequest(params) {
+        const headers = this._super(params);
+        const method = this.methodForRequest(params);
+
+        if (method !== 'GET') {
+          headers['Authorization'] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
         }
-        return this._super(url, type, options);
+        return headers;
+      },
+
+      dataForRequest(params) {
+        const data = this._super(params);
+        const method = this.methodForRequest(params);
+
+        if (method === 'GET') {
+          data.access_token = data.access_token || this.get('token'); // eslint-disable-line camelcase
+        }
+
+        return data;
       },
 
       cancel(modelName, id, snapshot) {
-        const url = this.buildURL(modelName, id) + '/cancel';
+        const url = `${this.buildURL(modelName, id)}/cancel`;
         return this.ajax(url, 'PUT', { data: snapshot });
       }
-
     });
     """
     {:ok, "patients", template } = generate_from_resource(resource)
@@ -100,10 +117,10 @@ defmodule AdapterTemplateTest do
 
   test "path_for_type chucks in the function when the resource name has underscores" do
     expected_template = """
-    pathForType(type) {
+      pathForType(type) {
         const underscorized = EmberString.underscore(type);
         return EmberString.pluralize(underscorized);
-      },
+      }
     """
 
     template = path_for_type("staff_members")
