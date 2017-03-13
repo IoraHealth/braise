@@ -5,7 +5,7 @@ build: deps
 	mkdir -p bin
 	$(MIX_BIN) escript.build
 	mv braise bin
-deps:
+deps: mix.exs mix.lock
 	$(MIX_BIN) deps.get
 clean:
 	rm -rf ./bin/braise ./_build
