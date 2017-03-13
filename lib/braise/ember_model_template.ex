@@ -54,17 +54,16 @@ defmodule Braise.EmberModelTemplate do
   defp non_restful_javascript(link_action) do
     action_name = link_action.name
     """
-      #{action_name}() {
-        let _this = this;
-        const modelName = this.constructor.modelName;
+      async #{action_name}() {
+        const { modelName } = this.constructor;
         const adapter = this.store.adapterFor(modelName);
-        return adapter.#{action_name}(modelName, this.get('id'), arguments).then((response) => {
-          const serializer = _this.store.serializerFor(modelName);
-          const payloadKey = serializer.payloadKeyFromModelName(modelName);
-          const payload = response[payloadKey];
-          _this.setProperties(payload);
-        });
-      },
+        const response = await adapter.#{action_name}(modelName, this.get('id'), arguments);
+        const serializer = this.store.serializerFor(modelName);
+        const payloadKey = serializer.payloadKeyFromModelName(modelName);
+        const payload = response[payloadKey];
+        this.setProperties(payload);
+        return this;
+      }
     """
   end
 end
