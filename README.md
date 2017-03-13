@@ -3,7 +3,9 @@
 Braise cooks those boring old JSON Schema definitions
 down into rock-hard-awesome Ember Data adapters and models.
 
-Releases published on hex.pm at https://hex.pm/packages/braise
+Releases published on hex.pm at https://hex.pm/packages/braise.
+
+Braise generates Ember Data adapters and models compatible with **Ember Data 2.7+**.
 
 ## Installation
 

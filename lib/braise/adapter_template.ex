@@ -27,22 +27,30 @@ defmodule Braise.AdapterTemplate do
     import Ember from 'ember';
 
     const { RESTAdapter } = DS;
-    const { computed, String: EmberString } = Ember;
+    const { computed, String: EmberString } = Ember;  // eslint-disable-line no-unused-vars
 
     export default RESTAdapter.extend({
       host: "#{resource.url.scheme}://#{resource.url.host}",
       namespace: "#{path_without_leading_slash(resource)}",
       token: computed.alias('accessTokenWrapper.token'),
-      #{path_for_type(resource.name)}
-      #{authorization}
-      #{custom_actions(resource)}
+
+      #{adapter_methods(resource)}
     });
     """
+    |> Braise.TemplateFormatter.format!
     |> ok_tuple(resource.name)
   end
 
   defp path_without_leading_slash(resource) do
     String.slice(resource.url.path, 1..-1)
+  end
+
+  defp adapter_methods(resource) do
+    [
+      path_for_type(resource.name),
+      authorization_methods()
+    ] ++ custom_actions(resource)
+    |> Braise.TemplateFormatter.format_lines
   end
 
   @doc """
@@ -60,44 +68,53 @@ defmodule Braise.AdapterTemplate do
   def path_for_type(resource_name) do
     if String.match?(resource_name, ~r/_/) do
       """
-      pathForType(type) {
+        pathForType(type) {
           const underscorized = EmberString.underscore(type);
           return EmberString.pluralize(underscorized);
-        },
+        }
       """
     else
       ""
     end
   end
 
-  defp authorization do
+  defp authorization_methods do
     """
-    ajaxOptions(url, type, options) {
-        options = options || {};
-        if (type === "GET") {
-          options.data = options.data || {};
-          options.data["access_token"] = this.get('token');
-        } else {
-          options.headers = options.headers || {};
-          options.headers["Authorization"] = 'Bearer ' + this.get('token');
+      // Prevent CORS preflight requests for GET requests
+      headersForRequest(params) {
+        const headers = this._super(params);
+        const method = this.methodForRequest(params);
+
+        if (method !== 'GET') {
+          headers['Authorization'] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
         }
-        return this._super(url, type, options);
+        return headers;
       },
+
+      dataForRequest(params) {
+        const data = this._super(params);
+        const method = this.methodForRequest(params);
+
+        if (method === 'GET') {
+          data.access_token = data.access_token || this.get('token'); // eslint-disable-line camelcase
+        }
+
+        return data;
+      }
     """
   end
 
   defp custom_actions(resource) do
     Braise.LinkAction.non_restful_actions(resource.links)
     |> Enum.map(&non_restful_javascript/1)
-    |> Enum.join(",\n")
   end
 
   defp non_restful_javascript(link_action) do
     action_name = link_action.name
     method = link_action.method
     """
-    #{action_name}(modelName, id, snapshot) {
-        const url = this.buildURL(modelName, id) + '/#{action_name}';
+      #{action_name}(modelName, id, snapshot) {
+        const url = `${this.buildURL(modelName, id)}/#{action_name}`;
         return this.ajax(url, '#{method}', { data: snapshot });
       }
     """
