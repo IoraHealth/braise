@@ -6,7 +6,7 @@ defmodule Braise.Mixfile do
   def project do
     [app: :braise,
      version: Braise.version,
-     elixir: "~> 1.4",
+     elixir: "~> 1.3",
      escript: escript_config,
      description: "A library that converts JSON Schema into ember models/adapters.",
      deps: deps,
