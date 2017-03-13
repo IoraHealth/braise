@@ -6,7 +6,7 @@ defmodule Braise.Mixfile do
   def project do
     [app: :braise,
      version: Braise.version,
-     elixir: "~> 1.0",
+     elixir: "~> 1.4",
      escript: escript_config,
      description: "A library that converts JSON Schema into ember models/adapters.",
      deps: deps,
@@ -40,7 +40,7 @@ defmodule Braise.Mixfile do
   end
 
   defp package do
-    [maintainers: ["Patrick Robertson", "Alex Rothenberg"],
+    [maintainers: ["Patrick Robertson", "Alex Rothenberg", "Max Fierke"],
      licenses: ["MIT"],
      links: %{github: "https://github.com/IoraHealth/braise"}]
   end

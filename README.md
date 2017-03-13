@@ -1,53 +1,48 @@
-Braise [![[travis]](https://travis-ci.org/IoraHealth/braise.png)](https://travis-ci.org/IoraHealth/braise)
-======
+# Braise [![[travis]](https://travis-ci.org/IoraHealth/braise.png)](https://travis-ci.org/IoraHealth/braise)
 
 Braise cooks those boring old JSON Schema definitions
-down into rock-hard-awesome Ember CLI files.
+down into rock-hard-awesome Ember Data adapters and models.
 
 Releases published on hex.pm at https://hex.pm/packages/braise
 
-INSTALLATION
-------------
+## Installation
 
 ```sh
 cd ~/src
 git clone https://github.com/IoraHealth/braise.git
 ```
 
-bash: `echo 'export PATH=$PATH:~/src/braise/bin' >> ~/.bash_profile`
+### Add to your PATH
+#### Bash
+```
+echo 'export PATH=$PATH:~/src/braise/bin' >> ~/.bash_profile
+```
 
-USAGE
------
+#### Zsh
+```
+echo 'export PATH=$PATH:~/src/braise/bin' >> ~/.zshrc
+```
+
+## Usage
 
 ```sh
-braise --file <JSON_SCHEMA_FILE>
-braise -f <JSON_SCHEMA_FILE>
+$ braise [--file|-f] <JSON_SCHEMA_FILE>
 ```
 
 Takes that boring JSON schema file and outputs some much better files.
 
-PREREQUISITES
--------------
+## Building
 
-```
-brew install elixir
-mix deps.get
-mix escript.build
-mv braise bin
-```
+1. Ensure Elixir 1.4+ is installed. On macOS: `brew install elixir`.
+2. Run `make`. See more targets in the [`Makefile`](Makefile)
 
-EXAMPLES
---------
+## Examples
 
 The examples dir has some input json schemas and the corresponding output produced by braise.  To regenerate them
 
-```
-braise --file examples/source/v3/patients.json --output examples/output
-braise --file examples/source/v3/medication_verification.json --output examples/output
-braise --file examples/source/v20150918/sponsor_api.json --output examples/output
+```sh
+$ make samples
 ```
 
-LICENSE
--------
-
-Apache v2.0
+## License
+MIT. See [LICENSE.md](LICENSE.md) for full license text.
