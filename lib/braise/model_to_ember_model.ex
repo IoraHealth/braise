@@ -18,13 +18,17 @@ defmodule Braise.ModelToEmberModel do
 
   defp convert_attribute(attribute) do
     case attribute do
-      %{ type: ["boolean"], format: _, name: name} -> %{ name: name, type: "boolean" }
-      %{ type: ["string"], format: "date-time", name: name} -> %{name: name, type: "date"}
-      %{ type: ["integer"], format: _, name: name} -> %{name: name, type: "number"}
-      %{ type: ["number"], format: _, name: name} -> %{name: name, type: "number"}
-      %{ type: ["string"], format: _, name: name} -> %{ name: name, type: "string"}
-      %{ type: _, format: _, name: name} -> %{ name: name, type: nil }
+      %{ type: ["boolean"], format: _, name: name} -> %{ name: camelize(name), type: "boolean" }
+      %{ type: ["string"], format: "date-time", name: name} -> %{name: camelize(name), type: "date"}
+      %{ type: ["integer"], format: _, name: name} -> %{name: camelize(name), type: "number"}
+      %{ type: ["number"], format: _, name: name} -> %{name: camelize(name), type: "number"}
+      %{ type: ["string"], format: _, name: name} -> %{ name: camelize(name), type: "string"}
+      %{ type: _, format: _, name: name} -> %{ name: camelize(name), type: nil }
     end
+  end
+
+  defp camelize(attribute_name) do
+    Inflex.camelize(attribute_name, :lower)
   end
 
   defp strip_null(attribute) do
