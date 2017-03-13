@@ -1,9 +1,11 @@
 language: elixir
 elixir:
   - 1.2.1
+  - 1.4.2
 otp_release:
   - 18.2
-install: mix deps.get
+  - 19
+install: make
 before_install:
   - mix local.hex --force
-script: mix test --no-start
+script: make test
