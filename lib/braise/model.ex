@@ -18,7 +18,7 @@ defmodule Braise.Model do
     actions = %{
       unsupported: Braise.LinkAction.unsupported_restful_actions(resource.links),
       non_restful: Braise.LinkAction.non_restful_actions(resource.links)}
-    %Braise.Model{name: resource.name, attributes: attributes, actions: actions, actions: actions}
+    %Braise.Model{name: resource.name, attributes: attributes, actions: actions}
   end
 
   defp map_attribute({name, element}) do

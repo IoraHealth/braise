@@ -20,7 +20,7 @@ defmodule Braise.JsonPointer do
 
   # lookup in current
   defp lookup([key|tail], current_definitions, definitions_root) do
-    lookup(tail, Dict.get(current_definitions, key), definitions_root)
+    lookup(tail, Map.get(current_definitions, key), definitions_root)
   end
 
 end

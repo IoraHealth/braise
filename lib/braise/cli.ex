@@ -83,7 +83,7 @@ defmodule Braise.CLI do
   def version_from!(path) do
     captures = Regex.named_captures(~r/\/(?<version>v\d+)\//, path)
     if is_map(captures) do
-      Dict.get(captures, "version")
+      Map.get(captures, "version")
     else
       raise File.Error, reason: "does not follow our version convention", action: "find version from path", path: path
     end

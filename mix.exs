@@ -7,10 +7,10 @@ defmodule Braise.Mixfile do
     [app: :braise,
      version: Braise.version,
      elixir: "~> 1.3",
-     escript: escript_config,
+     escript: escript_config(),
      description: "A library that converts JSON Schema into ember models/adapters.",
-     deps: deps,
-     package: package]
+     deps: deps(),
+     package: package()]
   end
 
   # Configuration for the OTP application
