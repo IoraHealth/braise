@@ -10,25 +10,16 @@ export default RESTAdapter.extend({
   namespace: "v20150918",
   token: computed.alias('accessTokenWrapper.token'),
 
-  // Prevent CORS preflight requests for GET requests
-  headersForRequest(params) {
-    const headers = this._super(params);
-    const method = this.methodForRequest(params);
-
-    if (method !== 'GET') {
-      headers['Authorization'] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
+  // replace with `headersForRequest` & `dataForRequest` once `ds-improved-ajax` feature is enabled on ember-data
+  ajaxOptions(url, type, options) {
+    options = options || {};
+    if (type === "GET") {
+      options.data = options.data || {};
+      options.data["access_token"] = this.get('token'); // eslint-disable-line dot-notation
+    } else {
+      options.headers = options.headers || {};
+      options.headers["Authorization"] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
     }
-    return headers;
-  },
-
-  dataForRequest(params) {
-    const data = this._super(params);
-    const method = this.methodForRequest(params);
-
-    if (method === 'GET') {
-      data.access_token = data.access_token || this.get('token'); // eslint-disable-line camelcase
-    }
-
-    return data;
+    return this._super(url, type, options);
   }
 });
