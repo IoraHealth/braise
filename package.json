@@ -1,0 +1,39 @@
+{
+  "name": "braise",
+  "version": "1.0.0",
+  "description": "Tool for generating Ember Adapters and Models from JSON Schema",
+  "private": true,
+  "directories": {
+    "doc": "doc",
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "eslint examples/output/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IoraHealth/braise.git"
+  },
+  "keywords": [
+    "ember",
+    "code",
+    "generator",
+    "adapters",
+    "models",
+    "elixir"
+  ],
+  "author": "Iora Health",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IoraHealth/braise/issues"
+  },
+  "homepage": "https://github.com/IoraHealth/braise#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.17.1",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-ember-suave": "^1.0.0",
+    "eslint-plugin-promise": "^3.5.0"
+  }
+}

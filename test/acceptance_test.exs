@@ -7,16 +7,16 @@ defmodule AcceptanceTest do
     Path.join [System.cwd(), "test_output"]
   end
   setup do
-    File.mkdir test_output_dir
+    File.mkdir test_output_dir()
 
     on_exit fn ->
-      File.rm_rf test_output_dir
+      File.rm_rf test_output_dir()
     end
   end
 
   test "v3/patients.json" do
     filename = Path.join [System.cwd(), "examples/source/v3/patients.json"]
-    process({:file, filename, :output, test_output_dir})
+    process({:file, filename, :output, test_output_dir()})
 
     ["v3/patient.js"]
     |> Enum.each(fn(resource)->
@@ -27,7 +27,7 @@ defmodule AcceptanceTest do
 
   test "v3/medication_verification.json" do
     filename = Path.join [System.cwd(), "examples/source/v3/medication_verification.json"]
-    process({:file, filename, :output, test_output_dir})
+    process({:file, filename, :output, test_output_dir()})
 
     ["v3/medication-verification.js"]
     |> Enum.each(fn(resource)->
@@ -38,7 +38,7 @@ defmodule AcceptanceTest do
 
   test "v20150918/sponsor_api.json" do
     filename = Path.join [System.cwd(), "examples/source/v20150918/sponsor_api.json"]
-    process({:file, filename, :output, test_output_dir})
+    process({:file, filename, :output, test_output_dir()})
 
     [
       "v20150918/emergency-contact.js",
@@ -56,7 +56,7 @@ defmodule AcceptanceTest do
 
   test "v1/calendar_events.json" do
     filename = Path.join [System.cwd(), "examples/source/v1/calendar_events.json"]
-    process({:file, filename, :output, test_output_dir})
+    process({:file, filename, :output, test_output_dir()})
 
     ["v1/calendar-event.js"]
     |> Enum.each(fn(resource)->
@@ -66,18 +66,18 @@ defmodule AcceptanceTest do
   end
 
   defp expected_adapter_for(resource) do
-    File.read(Path.join [System.cwd(), "examples/output/adapters", resource])
+    File.read(Path.join [System.cwd(), "examples/output/braise-adapters", resource])
   end
 
   defp expected_model_for(resource) do
-    File.read(Path.join [System.cwd(), "examples/output/model", resource])
+    File.read(Path.join [System.cwd(), "examples/output/braise-models", resource])
   end
 
   defp actual_adapter_for(resource) do
-    File.read(Path.join [test_output_dir, "adapters", resource])
+    File.read(Path.join [test_output_dir(), "braise-adapters", resource])
   end
 
   defp actual_model_for(resource) do
-    File.read(Path.join [test_output_dir, "model", resource])
+    File.read(Path.join [test_output_dir(), "braise-models", resource])
   end
 end

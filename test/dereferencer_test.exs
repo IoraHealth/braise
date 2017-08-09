@@ -4,11 +4,11 @@ defmodule DereferencerTest do
   import Braise.Dereferencer, only: [dereference: 2]
 
   test "dereference/2 pulls the inline first_name" do
-    assert first_name == dereference(response, schema)["first_name"]
+    assert first_name() == dereference(response(), schema())["first_name"]
   end
 
   test "dereference/2 pulls the guid from the definitions" do
-    assert guid == dereference(response, schema)["guid"]
+    assert guid() == dereference(response(), schema())["guid"]
   end
 
   def first_name do
@@ -22,7 +22,7 @@ defmodule DereferencerTest do
   def response do
     %{
       "guid" => %{ "$ref" => "/definitions/pirate/definitions/guid"},
-      "first_name" => first_name
+      "first_name" => first_name()
     }
   end
 
@@ -30,11 +30,11 @@ defmodule DereferencerTest do
     %{"definitions" =>
       %{"pirate" =>
         %{"definitions" =>
-          %{"guid" => guid}}}}
+          %{"guid" => guid()}}}}
   end
 
   def attributes do
-    [first_name_attribute, guid_attribute]
+    [first_name_attribute(), guid_attribute()]
   end
 
   def first_name_attribute do

@@ -21,24 +21,26 @@ defmodule AdapterTemplateTest do
     import DS from 'ember-data';
     import Ember from 'ember';
 
-    export default DS.RESTAdapter.extend({
+    const { RESTAdapter } = DS;
+    const { computed, String: EmberString } = Ember; // eslint-disable-line no-unused-vars
+
+    export default RESTAdapter.extend({
       host: "http://production.icisapp.com",
       namespace: "api/v2",
-      token: Ember.computed.alias('accessTokenWrapper.token'),
-      
-      ajaxOptions: function(url, type, options) {
+      token: computed.alias('accessTokenWrapper.token'),
+
+      // replace with `headersForRequest` & `dataForRequest` once `ds-improved-ajax` feature is enabled on ember-data
+      ajaxOptions(url, type, options) {
         options = options || {};
         if (type === "GET") {
           options.data = options.data || {};
-          options.data["access_token"] = this.get('token');
+          options.data["access_token"] = this.get('token'); // eslint-disable-line dot-notation
         } else {
           options.headers = options.headers || {};
-          options.headers["Authorization"] = 'Bearer ' + this.get('token');
+          options.headers["Authorization"] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
         }
         return this._super(url, type, options);
-      },
-
-      
+      }
     });
     """
     {:ok, "patients", template } = generate_from_resource(resource)
@@ -57,28 +59,31 @@ defmodule AdapterTemplateTest do
     import DS from 'ember-data';
     import Ember from 'ember';
 
-    export default DS.RESTAdapter.extend({
+    const { RESTAdapter } = DS;
+    const { computed, String: EmberString } = Ember; // eslint-disable-line no-unused-vars
+
+    export default RESTAdapter.extend({
       host: "http://production.icisapp.com",
       namespace: "api/v2",
-      token: Ember.computed.alias('accessTokenWrapper.token'),
-      
-      ajaxOptions: function(url, type, options) {
+      token: computed.alias('accessTokenWrapper.token'),
+
+      // replace with `headersForRequest` & `dataForRequest` once `ds-improved-ajax` feature is enabled on ember-data
+      ajaxOptions(url, type, options) {
         options = options || {};
         if (type === "GET") {
           options.data = options.data || {};
-          options.data["access_token"] = this.get('token');
+          options.data["access_token"] = this.get('token'); // eslint-disable-line dot-notation
         } else {
           options.headers = options.headers || {};
-          options.headers["Authorization"] = 'Bearer ' + this.get('token');
+          options.headers["Authorization"] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
         }
         return this._super(url, type, options);
       },
 
-      cancel: function(modelName, id, snapshot) {
-        var url = this.buildURL(modelName, id) + '/cancel';
+      cancel(modelName, id, snapshot) {
+        const url = `${this.buildURL(modelName, id)}/cancel`;
         return this.ajax(url, 'PUT', { data: snapshot });
       }
-
     });
     """
     {:ok, "patients", template } = generate_from_resource(resource)
@@ -94,10 +99,10 @@ defmodule AdapterTemplateTest do
 
   test "path_for_type chucks in the function when the resource name has underscores" do
     expected_template = """
-    pathForType: function(type) {
-        var underscorized = Ember.String.underscore(type);
-        return Ember.String.pluralize(underscorized);
-      },
+      pathForType(type) {
+        const underscorized = EmberString.underscore(type);
+        return EmberString.pluralize(underscorized);
+      }
     """
 
     template = path_for_type("staff_members")

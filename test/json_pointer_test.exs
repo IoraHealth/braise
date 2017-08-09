@@ -4,12 +4,12 @@ defmodule JsonPointerTest do
   import Braise.JsonPointer, only: [lookup: 2]
 
   test "traversing down to find a definition" do
-    actual = lookup("#/definitions/pirate/definitions/guid", simple_definitions)
+    actual = lookup("#/definitions/pirate/definitions/guid", simple_definitions())
     assert "a guid is an id" == actual
   end
 
   test "traversing down and back up with a '#'" do
-    actual = lookup("#/definitions/pirate/definitions/location", complex_definitions)
+    actual = lookup("#/definitions/pirate/definitions/location", complex_definitions())
     assert %{ "$ref" => "#/definitions/location/definitions/zip_code"} == actual
   end
 

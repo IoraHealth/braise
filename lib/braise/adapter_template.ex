@@ -26,20 +26,31 @@ defmodule Braise.AdapterTemplate do
     import DS from 'ember-data';
     import Ember from 'ember';
 
-    export default DS.RESTAdapter.extend({
+    const { RESTAdapter } = DS;
+    const { computed, String: EmberString } = Ember; // eslint-disable-line no-unused-vars
+
+    export default RESTAdapter.extend({
       host: "#{resource.url.scheme}://#{resource.url.host}",
       namespace: "#{path_without_leading_slash(resource)}",
-      token: Ember.computed.alias('accessTokenWrapper.token'),
-      #{path_for_type(resource.name)}
-      #{authorization}
-      #{custom_actions(resource)}
+      token: computed.alias('accessTokenWrapper.token'),
+
+      #{adapter_methods(resource)}
     });
     """
+    |> Braise.TemplateFormatter.format!
     |> ok_tuple(resource.name)
   end
 
   defp path_without_leading_slash(resource) do
     String.slice(resource.url.path, 1..-1)
+  end
+
+  defp adapter_methods(resource) do
+    [
+      path_for_type(resource.name),
+      authorization_methods()
+    ] ++ custom_actions(resource)
+    |> Braise.TemplateFormatter.format_lines
   end
 
   @doc """
@@ -57,44 +68,44 @@ defmodule Braise.AdapterTemplate do
   def path_for_type(resource_name) do
     if String.match?(resource_name, ~r/_/) do
       """
-      pathForType: function(type) {
-          var underscorized = Ember.String.underscore(type);
-          return Ember.String.pluralize(underscorized);
-        },
+        pathForType(type) {
+          const underscorized = EmberString.underscore(type);
+          return EmberString.pluralize(underscorized);
+        }
       """
     else
       ""
     end
   end
 
-  defp authorization do
+  defp authorization_methods do
     """
-    ajaxOptions: function(url, type, options) {
+      // replace with `headersForRequest` & `dataForRequest` once `ds-improved-ajax` feature is enabled on ember-data
+      ajaxOptions(url, type, options) {
         options = options || {};
         if (type === "GET") {
           options.data = options.data || {};
-          options.data["access_token"] = this.get('token');
+          options.data["access_token"] = this.get('token'); // eslint-disable-line dot-notation
         } else {
           options.headers = options.headers || {};
-          options.headers["Authorization"] = 'Bearer ' + this.get('token');
+          options.headers["Authorization"] = `Bearer ${this.get('token')}`; // eslint-disable-line dot-notation
         }
         return this._super(url, type, options);
-      },
+      }
     """
   end
 
   defp custom_actions(resource) do
     Braise.LinkAction.non_restful_actions(resource.links)
     |> Enum.map(&non_restful_javascript/1)
-    |> Enum.join(",\n")
   end
 
   defp non_restful_javascript(link_action) do
     action_name = link_action.name
     method = link_action.method
     """
-    #{action_name}: function(modelName, id, snapshot) {
-        var url = this.buildURL(modelName, id) + '/#{action_name}';
+      #{action_name}(modelName, id, snapshot) {
+        const url = `${this.buildURL(modelName, id)}/#{action_name}`;
         return this.ajax(url, '#{method}', { data: snapshot });
       }
     """

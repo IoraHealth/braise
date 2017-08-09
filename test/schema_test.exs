@@ -1,7 +1,7 @@
 defmodule SchemaTest do
   use ExUnit.Case
 
-  import Braise.Schema, only: [url: 1, resources: 1]
+  import Braise.Schema, only: [url: 1]
 
   test "url/1 valid schema results in a parsed URI" do
     uri = "http://crazytown.biz/api/v2"
@@ -22,41 +22,41 @@ defmodule SchemaTest do
   end
 
   test "resources/1 returns a length of the resources provided in the definition" do
-    assert Enum.count(resources) == 1
+    assert Enum.count(resources()) == 1
   end
 
   test "resources/1 sets the resource name" do
-    assert resource.name == "patient"
+    assert resource().name == "patient"
   end
 
   test "resource/1 sets the response to definition reference names" do
-    assert resource.response == %{
-      "dob" => definition_meat["dob"],
-      "email" => definition_meat["email"],
-      "guid" => definition_meat["guid"],
-      "title" => definition_properties["title"]
+    assert resource().response == %{
+      "dob" => definition_meat()["dob"],
+      "email" => definition_meat()["email"],
+      "guid" => definition_meat()["guid"],
+      "title" => definition_properties()["title"]
     }
   end
 
   test "resource/1 sets the links to definition reference names" do
-    assert resource.links == [
+    assert resource().links == [
       %Braise.LinkAction{method: "GET", name: :index, on_member: false, restful: true}
     ]
   end
 
-  def resources, do: Braise.Schema.resources(schema)
+  def resources, do: Braise.Schema.resources(schema())
 
-  def resource, do: List.first(resources)
+  def resource, do: List.first(resources())
 
   def schema do
-    %Braise.Schema{definitions: definitions, properties: properties, links: links}
+    %Braise.Schema{definitions: definitions(), properties: properties(), links: links()}
   end
 
   def definitions do
     %{"patient" =>
-      %{"definitions" => definition_meat,
-        "properties" => definition_properties,
-        "links" => links
+      %{"definitions" => definition_meat(),
+        "properties" => definition_properties(),
+        "links" => links()
        }
      }
   end

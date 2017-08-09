@@ -54,10 +54,10 @@ defmodule Braise.CLI do
   def write_adapters_and_models([resource | tail], version, output) do
     {:ok, name, adapter} = Braise.AdapterTemplate.generate_from_resource(resource)
 
-    adapter_filename = output_filename_for(output, "adapters", version, name)
+    adapter_filename = output_filename_for(output, "braise-adapters", version, name)
     write_to_file(adapter, adapter_filename)
 
-    model_filename = output_filename_for(output, "model", version, name)
+    model_filename = output_filename_for(output, "braise-models", version, name)
 
     Braise.Model.parse_from_resource(resource)
     |> Braise.ModelToEmberModel.convert
@@ -83,7 +83,7 @@ defmodule Braise.CLI do
   def version_from!(path) do
     captures = Regex.named_captures(~r/\/(?<version>v\d+)\//, path)
     if is_map(captures) do
-      Dict.get(captures, "version")
+      Map.get(captures, "version")
     else
       raise File.Error, reason: "does not follow our version convention", action: "find version from path", path: path
     end
